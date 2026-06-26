@@ -5,18 +5,18 @@ export default function Dashboard() {
     <main className="dashboard-page">
       <aside className="dashboard-sidebar">
         <div className="sidebar-brand">
-          <h2>CRM Admin</h2>
-          <p>Bayi Paneli</p>
         </div>
         <nav className="sidebar-nav">
-          <a href="#overview" className="active">
-            Genel Bakış
-          </a>
-          <a href="#orders">Finans</a>
-          <a href="#customers">Siparişler</a>
-          <a href="#reports">Stoklar</a>
-          <a href="#settings">Dökümanlar</a>
-          <a href="#duyurular">Duyurular</a>
+          <a href="/urunler">Ürünler</a>
+          <a href="/siparisler">Siparişler</a>
+          <a href="/stoklar">Stoklar</a>
+          <a href="/teklifler">Teklifler</a>
+          <a href="/dokumanlar">Döküman Merkezi</a>
+          <a href="/finans">Finans ve Cari Hesaplar</a>
+          <a href="/raporlar">Raporlar ve Analizler</a>
+          <a href="/kullanicilar">Kullanıcı Yönetimi</a>
+          <a href="/bildirimler">Bildirimler</a>
+          <a href="/duyurular">Duyurular</a>
         </nav>
       </aside>
 
@@ -24,7 +24,7 @@ export default function Dashboard() {
         <header className="dashboard-header">
           <div>
             <p className="dashboard-subtitle">Hoş geldiniz, yönetici</p>
-            <h1>CRM Yönetim Paneli</h1>
+            <h1>Bayi Yönetim Paneli</h1>
           </div>
           <Link href="/" className="dashboard-logout">
             Çıkış Yap
