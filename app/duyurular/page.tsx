@@ -22,16 +22,16 @@ export default function AnnouncementsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">Duyurular & Panolar</h1>
-          <p className="text-sm text-gray-500">Şirket genelindeki resmi bilgilendirmeleri, tatil yönetimlerini ve departman duyurularını takip edin.</p>
+          <p className="text-sm text-[#53575A]">Şirket genelindeki resmi bilgilendirmeleri, tatil yönetimlerini ve departman duyurularını takip edin.</p>
         </div>
-        <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+        <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#EA0029] hover:bg-[#c40022] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
           {/* Kalem/Yazı İkonu */}
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
           Yeni Duyuru Yayınla
         </button>
       </div>
 
-      ---
+      <hr className="border-gray-200" />
 
       {/* ARAMA VE KATEGORİ FİLTRESİ */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-white p-4 border rounded-xl shadow-sm">
@@ -40,7 +40,7 @@ export default function AnnouncementsPage() {
           <input
             type="text"
             placeholder="Duyurularda ara..."
-            className="w-full pl-9 pr-4 py-2 border rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+            className="w-full pl-9 pr-4 py-2 border rounded-lg text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[rgba(234,0,41,0.15)] focus:border-[#EA0029] outline-none transition-all text-gray-900 placeholder-gray-400"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -50,7 +50,7 @@ export default function AnnouncementsPage() {
           <select 
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full sm:w-auto text-sm border rounded-lg px-3 py-2 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto text-sm border rounded-lg px-3 py-2 bg-white text-[#53575A] outline-none focus:ring-2 focus:ring-[rgba(234,0,41,0.15)] focus:border-[#EA0029]"
           >
             <option value="all">Tüm Kategoriler</option>
             <option value="İK / İzin">İK / İzin</option>
@@ -71,7 +71,7 @@ export default function AnnouncementsPage() {
             <div 
               key={announcement.id} 
               className={`p-5 bg-white border rounded-xl shadow-sm space-y-3 relative transition-all hover:border-gray-300 ${
-                announcement.isPinned ? "border-amber-200 bg-amber-50/5 ring-1 ring-amber-100" : ""
+                announcement.isPinned ? "border-[rgba(234,0,41,0.2)] bg-[rgba(234,0,41,0.01)] ring-1 ring-[rgba(234,0,41,0.08)]" : ""
               }`}
             >
               {/* Duyuru Üst Bilgi Satırı */}
@@ -79,9 +79,9 @@ export default function AnnouncementsPage() {
                 <div className="flex items-center gap-2">
                   {/* Kategori Etiketi */}
                   <span className={`px-2.5 py-0.5 rounded text-xs font-semibold ${
-                    announcement.category.includes("İK") ? "bg-purple-50 text-purple-700 border border-purple-100" :
-                    announcement.category.includes("Eğitim") ? "bg-blue-50 text-blue-700 border border-blue-100" :
-                    "bg-gray-100 text-gray-700"
+                    announcement.category.includes("İK") ? "bg-gray-100 text-[#53575A] border border-gray-200" :
+                    announcement.category.includes("Eğitim") ? "bg-[rgba(234,0,41,0.06)] text-[#EA0029] border border-[rgba(234,0,41,0.1)]" :
+                    "bg-gray-100 text-[#53575A]"
                   }`}>
                     {announcement.category}
                   </span>
@@ -91,13 +91,13 @@ export default function AnnouncementsPage() {
                 {/* Sabitlenme (Pin) Durumu & Tarih */}
                 <div className="flex items-center gap-3 text-xs text-gray-400 font-medium">
                   {announcement.isPinned && (
-                    <span className="inline-flex items-center gap-1 text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold">
+                    <span className="inline-flex items-center gap-1 text-[#EA0029] bg-[rgba(234,0,41,0.06)] px-2 py-0.5 rounded font-bold">
                       {/* Raptiye İkonu */}
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-.44-1.24l-2.12-2.6A2 2 0 0 1 16 10.16V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v6.16a2 2 0 0 1-.44 1.24l-2.12 2.6a2 2 0 0 0-.44 1.24Z"/></svg>
                       Sabitlendi
                     </span>
                   )}
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1 text-gray-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     {announcement.date}
                   </span>
@@ -106,18 +106,18 @@ export default function AnnouncementsPage() {
 
               {/* Duyuru Başlık ve İçerik */}
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-gray-900 group-hover:text-blue-600">
+                <h3 className="text-base font-bold text-gray-900 transition-colors">
                   {announcement.title}
                 </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-[#53575A] leading-relaxed">
                   {announcement.content}
                 </p>
               </div>
 
               {/* Alt Bilgi (Yazar / Departman) */}
-              <div className="pt-2 border-t border-gray-100 flex justify-between items-center text-xs text-gray-500 font-medium">
+              <div className="pt-2 border-t border-gray-100 flex justify-between items-center text-xs text-[#53575A] font-medium">
                 <div className="flex items-center gap-1.5">
-                  <div className="h-4 w-4 bg-gray-200 rounded-full flex items-center justify-center text-[9px] font-bold text-gray-600">
+                  <div className="h-4 w-4 bg-gray-100 rounded-full flex items-center justify-center text-[9px] font-bold text-[#53575A] border border-gray-200">
                     {announcement.author[0]}
                   </div>
                   <span>{announcement.author}</span>
@@ -125,10 +125,10 @@ export default function AnnouncementsPage() {
                 
                 {/* Yönetimsel Hızlı Aksiyonlar */}
                 <div className="flex gap-2">
-                  <button title="Duyuruyu Düzenle" className="text-gray-400 hover:text-blue-600 p-1 rounded hover:bg-gray-50">
+                  <button title="Duyuruyu Düzenle" className="text-gray-400 hover:text-[#EA0029] p-1 rounded hover:bg-gray-50 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                   </button>
-                  <button title="Kaldır" className="text-gray-400 hover:text-red-600 p-1 rounded hover:bg-gray-50">
+                  <button title="Kaldır" className="text-gray-400 hover:text-red-600 p-1 rounded hover:bg-gray-50 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
                   </button>
                 </div>

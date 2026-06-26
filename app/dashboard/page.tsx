@@ -63,7 +63,7 @@ export default function Dashboard() {
           <div className="panel panel-table">
             <div className="panel-heading">
               <h2>Son Siparişler</h2>
-              <Link href="#">Tümünü gör</Link>
+              <Link href="/siparisler">Tümünü gör</Link>
             </div>
             <table>
               <thead>
