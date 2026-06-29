@@ -37,6 +37,30 @@ const products: Product[] = [
     image: "images/bedding-composter-11.jpg",
     url: "https://e-y-s.com/en/environmental-technology/mobile-recycling-machines/"
   },
+  {
+    id: 4,
+    name: "Seperatör Makinesi",
+    description: "Seperatör Makinesi, atık malzemeleri ayırarak geri dönüştürme işlemi yapar. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Seperatör Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    price: 55000,
+    image: "images/vidali-pres-seperatör.jpg",
+    url: "https://e-y-s.com/en/products-industries/eys-screw-press-manure-separators/"
+  },
+  {
+    id: 5,
+    name: "Karıştırıcı Makinesi",
+    description: "Karıştırıcı Makinesi, organik atıkları etkili bir şekilde karıştırarak kompost sürecini hızlandırır. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Karıştırıcı Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    price: 44000,
+    image: "images/dalgic-karistirici.jpg",
+    url: "https://e-y-s.com/en/manure-management/submersible-mixer/"
+  },
+  {
+    id: 6,
+    name: "Sıyırıcı Makinesi",
+    description: "Sıyırıcı Makinesi, atık malzemeleri etkili bir şekilde sıyırarak geri dönüştürme işlemi yapar. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Sıyırıcı Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    price: 67000,
+    image: "images/gubre-siyirici.jpg",
+    url: "https://e-y-s.com/en/products-industries/eys-manure-scraper/"
+  },
 ];
 
 export default function UrunlerPage() {
