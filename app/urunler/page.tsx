@@ -42,7 +42,7 @@ const products: Product[] = [
     name: "Seperatör Makinesi",
     description: "Seperatör Makinesi, atık malzemeleri ayırarak geri dönüştürme işlemi yapar. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Seperatör Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
     price: 55000,
-    image: "images/vidali-pres-seperatör.jpg",
+    image: "images/vidali-pres-seperator.jpg",
     url: "https://e-y-s.com/en/products-industries/eys-screw-press-manure-separators/"
   },
   {
