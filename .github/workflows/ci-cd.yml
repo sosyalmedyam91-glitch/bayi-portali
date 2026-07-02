@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-down: ubuntu-latest # İşlemin koşacağı sanal makine (Runner)
+    runs-on: ubuntu-latest # İşlemin koşacağı sanal makine (Runner)
 
     steps:
     # 1. Adım: GitHub deposundaki kodları sanal makineye çek
