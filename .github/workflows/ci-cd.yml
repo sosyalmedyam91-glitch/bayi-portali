@@ -1,0 +1,36 @@
+name: GitHub Actions CI/CD Hattı
+
+# Bu workflow hangi durumlarda tetiklenecek?
+on:
+  push:
+    branches: [ "main", "master" ] # main veya master branch'ine push yapıldığında çalışır
+  pull_request:
+    branches: [ "main" ] # bu branch'e PR açıldığında çalışır
+
+jobs:
+  build-and-test:
+    runs-down: ubuntu-latest # İşlemin koşacağı sanal makine (Runner)
+
+    steps:
+    # 1. Adım: GitHub deposundaki kodları sanal makineye çek
+    - name: Kodu Dünyaya Getir (Checkout)
+      uses: actions/checkout@v4
+
+    # 2. Adım: Geliştirme ortamını kur (Örnek: Node.js)
+    # Eğer projeniz Python ise 'actions/setup-python@v5' kullanabilirsiniz.
+    - name: Node.js Kurulumu
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Kullanmak istediğiniz versiyon
+
+    # 3. Adım: Bağımlılıkları yükle
+    - name: Bağımlılıkları Yükle (Install Dependencies)
+      run: npm ci
+
+    # 4. Adım: Testleri çalıştır
+    - name: Testleri Koş (Run Tests)
+      run: npm test
+
+    # 5. Adım: (Opsiyonel) Projeyi Derle/Build Et
+    - name: Projeyi Derle (Build)
+      run: npm run build --if-present

@@ -58,8 +58,8 @@ export default function Home() {
             {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
           </button>
           
-          <a href="/login" className="login-guest">
-            Misafir olarak giriş yap
+          <a href="/kayit-ol" className="login-guest">
+            Bayi kaydı oluşturmak için tıklayın
           </a>
           <div className="login-footer">
             <a href="#">Şifremi unuttum</a>
