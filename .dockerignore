@@ -3,7 +3,7 @@ node_modules
 dockerfile
 out
 build
-.dockerignorec
+.dockerignore
 .git
 .gitignore
 README.md
