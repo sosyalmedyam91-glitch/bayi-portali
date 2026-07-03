@@ -3,20 +3,13 @@
 
 import { useState } from 'react'
 import { handleLogin } from '@/app/actions/auth' // Oluşturduğumuz action'ı import ediyoruz
+import { signIn } from "next-auth/react"
 
 export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  async function clientAction(formData: FormData) {
-    setError(null)
-    setLoading(true)
-    
-    // Sunucu fonksiyonunu çağırıyoruz
-    const result = await handleLogin(formData)
-    
-    // Eğer geriye bir hata döndüyse state'e yazıyoruz
-    async function clientAction(formData: FormData) {
+async function clientAction(formData: FormData) {
   try {
     setError(null)
     setLoading(true)
@@ -30,14 +23,13 @@ export default function Home() {
     setLoading(false)
   }
 }
-  }
 
   return (
     <main className="login-page">
       <section className="login-card">
         <div className="login-brand">
-          <img src="/Eys Logo.png" alt="EYS Bayi Logo" className="login-logo" />
-          <p>EYS Bayi portalına erişmek için lütfen bilgilerinizi girin.</p>
+          <img src="/Eys Logo.png" alt="EYS Logo" className="login-logo" />
+          <p>EYS portalına erişmek için lütfen bilgilerinizi girin.</p>
         </div>
         
         {/* Hata mesajı varsa ekranda gösteriyoruz */}
@@ -54,7 +46,7 @@ export default function Home() {
             <input type="password" name="password" placeholder="Şifrenizi girin" required />
           </label>
           
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading} className="bg-[#53575A] hover:bg-[#44484a] text-white disabled:bg-gray-400">
             {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
           </button>
           
@@ -63,6 +55,11 @@ export default function Home() {
           </a>
           <div className="login-footer">
             <a href="#">Şifremi unuttum</a>
+          </div>
+          <div className="login-footer">
+                <button onClick={() => signIn("microsoft-entra-id")}>
+                  Microsoft ile Giriş Yap
+                </button>
           </div>
         </form>
       </section>

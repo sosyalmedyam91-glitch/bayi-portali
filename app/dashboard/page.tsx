@@ -4,6 +4,7 @@ export default function Dashboard() {
   return (
     <main className="dashboard-page">
       <aside className="dashboard-sidebar">
+        <img src="/Eys Logo.png" alt="EYS Logo" className="login-logo" />
         <div className="sidebar-brand">
         </div>
         <nav className="sidebar-nav">
@@ -14,6 +15,7 @@ export default function Dashboard() {
           <a href="/dokumanlar">Döküman Merkezi</a>
           <a href="/finans">Finans ve Cari Hesaplar</a>
           <a href="/raporlar">Raporlar ve Analizler</a>
+          <a href="/is-akisi">İş Akışı ve Görev Yönetimi</a>
           <a href="/kullanicilar">Kullanıcı Yönetimi</a>
           <a href="/bildirimler">Bildirimler</a>
           <a href="/duyurular">Duyurular</a>
@@ -23,8 +25,8 @@ export default function Dashboard() {
       <section className="dashboard-main">
         <header className="dashboard-header">
           <div>
-            <p className="dashboard-subtitle">Hoş geldiniz, yönetici</p>
-            <h1>Bayi Yönetim Paneli</h1>
+            <p className="dashboard-subtitle">Hoş geldiniz, Admin</p>
+            <h1>EYS İç Portal</h1>
           </div>
           <Link href="/" className="dashboard-logout">
             Çıkış Yap

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bayi Portalı | EYS Makina",
-  description: "EYS Makina Bayi Portalı",
+  title: "EYS Portal | EYS Makina ve Endüstri",
+  description: "EYS Makina Portalı",
 };
 
 export default function RootLayout({
