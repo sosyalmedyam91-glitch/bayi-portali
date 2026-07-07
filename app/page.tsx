@@ -16,24 +16,7 @@ export default function Home() {
 
         {/* method="GET" ve action="/dashboard" kaldırıldı, onun yerine action={clientAction} geldi */}
         <form className="login-form" onSubmit={(e) => e.preventDefault()}>
-  <label>
-    <span>Kullanıcı Adı</span>
-    <input
-      type="text"
-      placeholder="Microsoft hesabınız ile giriş yapın"
-      disabled
-    />
-  </label>
-
-  <label>
-    <span>Şifre</span>
-    <input
-      type="password"
-      placeholder="Microsoft hesabınız ile giriş yapın"
-      disabled
-    />
-  </label>
-
+          
 <button
   type="button"
   onClick={() => {
