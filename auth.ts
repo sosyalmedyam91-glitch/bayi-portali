@@ -3,7 +3,8 @@ import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
-  
+  secret: process.env.AUTH_SECRET,
+
   providers: [
     MicrosoftEntraID({
       clientId: process.env.AUTH_MICROSOFT_ID!,
@@ -14,12 +15,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 24, // 1 gün
+    maxAge: 60 * 60 * 24,
   },
 
   callbacks: {
     async jwt({ token, profile }) {
-      // Microsoft login sonrası user bilgisi token'a eklenir
       if (profile) {
         token.id = profile.sub;
         token.email = profile.email;
@@ -29,7 +29,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async session({ session, token }) {
-      // client tarafına giden session
       if (session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
@@ -40,8 +39,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   pages: {
-    signIn: "/", // login sayfan
+    signIn: "/",
   },
-
-  debug: process.env.NODE_ENV === "development",
 });
