@@ -1,6 +1,14 @@
 import NextAuth from "next-auth";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 
+console.log({
+  AUTH_SECRET: process.env.AUTH_SECRET ? "OK" : "MISSING",
+  AUTH_URL: process.env.AUTH_URL,
+  AUTH_MICROSOFT_ID: process.env.AUTH_MICROSOFT_ID ? "OK" : "MISSING",
+  AUTH_MICROSOFT_SECRET: process.env.AUTH_MICROSOFT_SECRET ? "OK" : "MISSING",
+  AUTH_MICROSOFT_TENANT_ID: process.env.AUTH_MICROSOFT_TENANT_ID ? "OK" : "MISSING",
+});
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   secret: process.env.AUTH_SECRET,
