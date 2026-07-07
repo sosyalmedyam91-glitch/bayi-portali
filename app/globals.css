@@ -200,6 +200,13 @@ body {
   color: #53575A;
 }
 
+.login-logo {
+  width: 220px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+}
+
 .dashboard-logout {
   display: inline-flex;
   align-items: center;

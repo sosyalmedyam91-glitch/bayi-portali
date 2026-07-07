@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { logout } from "@/app/actions/logout";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await auth();
+
   return (
     <main className="dashboard-page">
       <aside className="dashboard-sidebar">
@@ -25,12 +30,14 @@ export default function Dashboard() {
       <section className="dashboard-main">
         <header className="dashboard-header">
           <div>
-            <p className="dashboard-subtitle">Hoş geldiniz, Admin</p>
+            <p className="dashboard-subtitle">Hoş geldin {session?.user?.name}</p>
             <h1>EYS İç Portal</h1>
           </div>
-          <Link href="/" className="dashboard-logout">
-            Çıkış Yap
-          </Link>
+            <form action={logout}>
+              <button type="submit" className="dashboard-logout">
+                Çıkış Yap
+              </button>
+            </form>
         </header>
 
         <div className="dashboard-grid">
