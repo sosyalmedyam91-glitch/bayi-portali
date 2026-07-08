@@ -1,0 +1,95 @@
+.footer {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+
+    width: min(900px, 95%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+
+    padding: 18px 25px;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 8px 30px rgba(83,87,90,.15);
+
+    border: 1px solid rgba(83,87,90,.15);
+}
+
+
+/* Web siteleri */
+.footerWebsites {
+    display:flex;
+    gap:30px;
+}
+
+.footerWebsites a {
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    text-decoration:none;
+    color:#374151;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.footerWebsites a:hover {
+    color:#53575A;
+}
+
+
+/* Destek mail */
+.footerSupport {
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    color:#4b5563;
+}
+
+.footerSupport a {
+    color:#53575A;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.footerSupport a:hover {
+    text-decoration:underline;
+}
+
+
+/* Sosyal medya */
+.footerSocial {
+    display:flex;
+    gap:22px;
+}
+
+.footerSocial a {
+    font-size:32px;
+    color:#9ca3af;
+
+    transition:
+        transform .25s,
+        color .25s;
+}
+
+.footerSocial a:hover {
+    color:#53575A;
+    transform:translateY(-5px) scale(1.2);
+}
+
+
+/* Telif */
+.footerCopy {
+    font-size:12px;
+    color:#9ca3af;
+}

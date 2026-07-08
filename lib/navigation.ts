@@ -45,6 +45,24 @@ export const sidebarMenu: NavigationItem[] = [
     ],
   },
 
+    {
+    title: "Döküman Merkezi",
+    href: "/dokumanlar",
+    roles: [
+      ROLES.ADMIN,
+      ROLES.DEPO
+    ],
+  },
+
+    {
+    title: "İş Akışı ve Görev Yönetimi",
+    href: "/is-akisi",
+    roles: [
+      ROLES.ADMIN,
+      ROLES.BAYI,
+      ROLES.DEPO
+    ],
+  },
 
   {
     title: "Stoklar",

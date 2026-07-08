@@ -10,6 +10,7 @@ export default auth((req)=>{
 
  if(
   pathname === "/" ||
+  pathname === "/kayit-ol" ||
   pathname.startsWith("/api/auth")
  ){
 

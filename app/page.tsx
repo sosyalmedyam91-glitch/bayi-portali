@@ -2,6 +2,15 @@
 
 import { useState } from 'react'
 import { signIn } from "next-auth/react"
+import {
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+  FaLinkedin,
+  FaGlobe,
+  FaEnvelope,
+} from "react-icons/fa";
+import styles from "./page.module.css";
 
 export default function Home() {
   const [loading, setLoading] = useState(false)
@@ -19,10 +28,12 @@ export default function Home() {
     <main className="login-page">
 
       <section className="login-card">
-        <div className="login-brand">
-          <img src="/eys-logo.png" alt="EYS Logo" className="login-logo" />
-          <p>EYS portalına erişmek için lütfen EYS hesabınızı kullanın.</p>
-        </div>
+<div className="login-brand">
+  <img src="/eys-logo.png" alt="EYS Logo" className="login-logo" />
+  <p style={{ textAlign: "center", marginTop: "25px", marginBottom: "25px", fontSize: "18px", fontWeight: "bold" }}>
+    İç ve Dış Portal
+  </p>
+</div>
 
         <form className="login-form" onSubmit={(e) => e.preventDefault()}>
 
@@ -42,7 +53,7 @@ export default function Home() {
               : "EYS hesabınız ile giriş yapınız"}
           </button>
 
-          <a href="/kayit-ol" className="login-guest">
+          <a style={{ marginTop: "5px", marginBottom: "5px"}} href="/kayit-ol" className="login-guest">
             Bayi kaydı oluşturmak için tıklayın
           </a>
 
@@ -70,7 +81,7 @@ export default function Home() {
             fixed bottom-6 right-6 z-50
             flex items-center gap-3
             rounded-lg
-            bg-red-600
+            bg-[#EA0029]
             px-5 py-3
             text-white
             shadow-lg
@@ -98,6 +109,91 @@ export default function Home() {
           </span>
         </div>
       )}
+
+     <footer className={styles.footer}>
+
+  {/* Sosyal Medya - En Üst */}
+  <div className={styles.footerSocial}>
+    <a
+      href="https://www.facebook.com/eysmakina"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+    >
+      <FaFacebook />
+    </a>
+
+    <a
+      href="https://www.instagram.com/eysmakina"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+    >
+      <FaInstagram />
+    </a>
+
+    <a
+      href="https://www.youtube.com/@eysmakina"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="YouTube"
+    >
+      <FaYoutube />
+    </a>
+
+    <a
+      href="https://www.linkedin.com/company/eysmakina"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LinkedIn"
+    >
+      <FaLinkedin />
+    </a>
+  </div>
+
+
+  {/* Web Siteleri */}
+  <div className={styles.footerWebsites}>
+    <a
+      href="https://e-y-s.com"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <FaGlobe />
+      <span>e-y-s.com</span>
+    </a>
+
+    <a
+      href="https://www.eys-gmbh.de"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <FaGlobe />
+      <span>eys-gmbh.de</span>
+    </a>
+  </div>
+
+
+  {/* Destek */}
+  <div className={styles.footerSupport}>
+    <FaEnvelope />
+
+    <span>
+      Destek talepleri için:
+    </span>
+
+    <a href="mailto:bilgiteknolojileri@e-y-s.com">
+      bilgiteknolojileri@e-y-s.com
+    </a>
+  </div>
+
+
+  {/* Alt Bilgi */}
+  <div className={styles.footerCopy}>
+    © {new Date().getFullYear()} EYS Makina • All Rights Reserved
+  </div>
+
+</footer>
 
     </main>
   )
