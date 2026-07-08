@@ -5,6 +5,7 @@ export type NavigationItem = {
   title: string;
   href: string;
   roles: UserRole[];
+  showInSidebar?: boolean;
 };
 
 
@@ -17,8 +18,10 @@ export const sidebarMenu: NavigationItem[] = [
       ROLES.ADMIN,
       ROLES.BAYI,
       ROLES.DEPO,
-      ROLES.FINANS
+      ROLES.FINANS,
+      ROLES.SUPER_ADMIN
     ],
+    showInSidebar:false,
   },
 
 

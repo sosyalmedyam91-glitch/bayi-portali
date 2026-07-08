@@ -4,16 +4,6 @@ import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 import { UserRole } from "./lib/roles";
 import { prisma } from "@/lib/prisma";
 
-
-console.log({
-  AUTH_SECRET: process.env.AUTH_SECRET ? "OK" : "MISSING",
-  AUTH_URL: process.env.AUTH_URL,
-  AUTH_MICROSOFT_ID: process.env.AUTH_MICROSOFT_ID ? "OK" : "MISSING",
-  AUTH_MICROSOFT_SECRET: process.env.AUTH_MICROSOFT_SECRET ? "OK" : "MISSING",
-  AUTH_MICROSOFT_TENANT_ID: process.env.AUTH_MICROSOFT_TENANT_ID ? "OK" : "MISSING",
-});
-
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
 
   trustHost: true,
@@ -48,122 +38,75 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
 
+async signIn({ user }) {
 
-    async signIn({ user }) {
+  if (!user.email) {
+    return false;
+  }
 
-      if (!user.email) {
-        return false;
-      }
+  if (!user.email.endsWith("@e-y-s.com")) {
 
+    console.log(
+      "Firma dışı kullanıcı:",
+      user.email
+    );
 
-      const existingUser =
-        await prisma.user.findUnique({
-
-          where: {
-            email: user.email,
-          },
-
-        });
-
-
-      if (!existingUser) {
-
-        console.log(
-          "Yetkisiz kullanıcı:",
-          user.email
-        );
-
-        return false;
-
-      }
-
-
-      if (!existingUser.isActive) {
-
-        console.log(
-          "Pasif kullanıcı:",
-          user.email
-        );
-
-        return false;
-
-      }
-
-
-      return true;
-
-    },
-
-
-    async jwt({ token }) {
-
-
-      if (!token.email) {
-
-        return token;
-
-      }
-
-
-      const dbUser =
-        await prisma.user.findUnique({
-
-          where: {
-            email: token.email,
-          },
-
-        });
-
-
-if (dbUser) {
-
-  token.dbId =
-    dbUser.id;
-
-  token.role =
-    dbUser.role;
-
-}
-
-
-      return token;
-
-    },
-
-
-async session({ session, token }) {
-
-  if (session.user) {
-
-
-    if (token.dbId) {
-      session.user.dbId =
-        Number(token.dbId);
-    }
-
-
-    if (token.role) {
-      session.user.role =
-        token.role as UserRole;
-    }
-
+    return false;
 
   }
 
-
-  return session;
+  return true;
 
 },
 
+async jwt({ token, user }) {
+
+  const email =
+    user?.email ?? token.email;
+
+  if (!email) {
+    return token;
+  }
+
+  const dbUser =
+    await prisma.user.findUnique({
+      where:{
+        email
+      }
+    });
+
+  if(dbUser){
+
+    token.dbId = dbUser.id;
+    token.role = dbUser.role;
+
+  }
+
+  return token;
+},
+
+async session({session, token}){
+
+ if(session.user){
+
+   session.user.dbId =
+     Number(token.dbId);
+
+   session.user.role =
+     token.role as UserRole;
+
+ }
+
+ return session;
+
+},
 
   },
-
 
   pages: {
 
     signIn: "/",
 
   },
-
 
 });

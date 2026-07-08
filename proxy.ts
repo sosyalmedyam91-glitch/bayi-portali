@@ -3,14 +3,10 @@ import { NextResponse } from "next/server";
 
 import { canAccessRoute } from "@/lib/permissions";
 
-
-
 export default auth((req)=>{
-
 
  const {pathname} =
  req.nextUrl;
-
 
  if(
   pathname === "/" ||

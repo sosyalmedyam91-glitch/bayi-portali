@@ -3,7 +3,6 @@ import SidebarItem from "./SidebarItem";
 
 import { auth } from "@/auth";
 import { getSidebarMenu } from "@/lib/permissions";
-import { ROLES } from "@/lib/roles";
 
 export default async function Sidebar(){
 
@@ -21,7 +20,6 @@ const role =
  const menu =
  getSidebarMenu(role);
 
-
  return (
 
  <aside className="dashboard-sidebar">
@@ -29,7 +27,7 @@ const role =
 
  <Link href="/dashboard">
    <img
-    src="/Eys Logo.png"
+    src="/eys-logo.png"
     className="login-logo"
     alt="EYS Logo"
    />

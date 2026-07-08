@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+
 type Props = {
   title: string;
   href: string;
 };
+
 
 
 export default function SidebarItem({
@@ -14,19 +16,36 @@ export default function SidebarItem({
   href,
 }: Props) {
 
+
   const pathname = usePathname();
 
-  const active = pathname === href;
+
+  const active =
+    pathname === href ||
+    pathname.startsWith(`${href}/`);
+
 
 
   return (
+
     <Link
+
       href={href}
-      className={`sidebar-link ${
-        active ? "active" : ""
-      }`}
+
+      className={
+        `sidebar-link ${
+          active
+          ? "active"
+          : ""
+        }`
+      }
+
     >
+
       {title}
+
     </Link>
+
   );
+
 }

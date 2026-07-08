@@ -1,13 +1,10 @@
 import "./globals.css";
 import { Providers } from "./providers";
 
-console.log("ROOT LAYOUT ÇALIŞTI");
-
 export const metadata = {
   title: "EYS Portal",
   description: "EYS İç Portal",
 };
-
 
 export default function RootLayout({
   children,

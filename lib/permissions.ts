@@ -1,22 +1,29 @@
 import { sidebarMenu } from "./navigation";
 import { UserRole, ROLES } from "./roles";
 
+
 export function getSidebarMenu(
   role: UserRole
 ) {
 
-  // SUPER_ADMIN her şeyi görür
+  // SUPER_ADMIN tüm menüleri görür
   if (role === ROLES.SUPER_ADMIN) {
-    return sidebarMenu;
+
+    return sidebarMenu.filter(
+      item => item.showInSidebar !== false
+    );
+
   }
 
 
   return sidebarMenu.filter(
     item =>
-      item.roles.includes(role)
+      item.roles.includes(role) &&
+      item.showInSidebar !== false
   );
 
 }
+
 
 
 
@@ -25,9 +32,11 @@ export function canAccessRoute(
   role: UserRole
 ) {
 
-  // SUPER_ADMIN bypass
+
   if (role === ROLES.SUPER_ADMIN) {
+
     return true;
+
   }
 
 
@@ -38,10 +47,10 @@ export function canAccessRoute(
     );
 
 
-  // Tanımlı olmayan route'lar
-  // güvenlik için kapalı tutulabilir
   if (!route) {
+
     return false;
+
   }
 
 

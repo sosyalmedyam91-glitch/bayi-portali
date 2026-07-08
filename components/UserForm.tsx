@@ -2,50 +2,110 @@
 
 import { createUser } from "@/app/(portal)/kullanicilar/actions";
 
+
 export default function UserForm(){
 
-return (
+  return (
 
-<form action={createUser}>
+    <form
+      action={createUser}
+      className="user-form"
+    >
 
-<input
-name="name"
-placeholder="Ad Soyad"
-/>
 
-<input
-name="email"
-placeholder="Microsoft Email"
-/>
+      <div className="form-grid">
 
-<select name="role">
 
-<option value="BAYI">
-Bayi
-</option>
+        <label>
 
-<option value="DEPO">
-Depo
-</option>
+          Ad Soyad
 
-<option value="FINANS">
-Finans
-</option>
+          <input
+            name="name"
+            type="text"
+            placeholder="Kullanıcı adı soyadı"
+            required
+          />
 
-<option value="ADMIN">
-Admin
-</option>
+        </label>
 
-</select>
 
-<button type="submit">
 
-Kaydet
 
-</button>
+        <label>
 
-</form>
+          EYS Mail
 
-);
+          <input
+            name="email"
+            type="email"
+            placeholder="ornek@firma.com"
+            required
+          />
+
+        </label>
+
+
+
+
+        <label>
+
+          Kullanıcı Rolü
+
+
+          <select
+            name="role"
+            defaultValue="BAYI"
+          >
+
+            <option value="BAYI">
+              Bayi
+            </option>
+
+
+            <option value="DEPO">
+              Depo
+            </option>
+
+
+            <option value="FINANS">
+              Finans
+            </option>
+
+
+            <option value="ADMIN">
+              Admin
+            </option>
+
+
+          </select>
+
+
+        </label>
+
+
+      </div>
+
+
+
+
+      <div className="form-actions">
+
+
+        <button
+          type="submit"
+        >
+
+          Kullanıcı Kaydet
+
+        </button>
+
+
+      </div>
+
+
+    </form>
+
+  );
 
 }

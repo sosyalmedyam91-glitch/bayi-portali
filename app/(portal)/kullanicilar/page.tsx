@@ -20,31 +20,48 @@ export default async function KullaniciYonetimi(){
   }
 
 
-  const users =
-    await prisma.user.findMany({
 
-      orderBy:{
-        createdAt:"desc"
-      }
+  const users = await prisma.user.findMany({
 
-    });
+    orderBy:{
+      createdAt:"desc"
+    }
+
+  });
 
 
 
   return (
 
-    <section className="dashboard-panel">
+    <section className="panel user-management">
 
 
-      <div className="panel-heading">
-
-        <h1>
-          Kullanıcı Yönetimi
-        </h1>
+      <div className="user-header">
 
 
-        <Link href="/kullanicilar/yeni">
-          Yeni Kullanıcı
+        <div>
+
+          <p className="dashboard-subtitle">
+            Sistem kullanıcıları
+          </p>
+
+
+          <h1>
+            Kullanıcı Yönetimi
+          </h1>
+
+
+        </div>
+
+
+
+        <Link
+          href="/kullanicilar/yeni"
+          className="primary-button"
+        >
+
+          + Yeni Kullanıcı
+
         </Link>
 
 
@@ -52,96 +69,238 @@ export default async function KullaniciYonetimi(){
 
 
 
-      <table>
 
-        <thead>
+      <div className="user-summary">
 
-          <tr>
 
-            <th>
-              Ad
-            </th>
+        <div className="summary-box">
 
-            <th>
-              Email
-            </th>
+          <span>
+            Toplam Kullanıcı
+          </span>
 
-            <th>
-              Rol
-            </th>
+          <strong>
+            {users.length}
+          </strong>
 
-            <th>
-              Durum
-            </th>
 
-            <th>
-              Son Giriş
-            </th>
-
-          </tr>
-
-        </thead>
+        </div>
 
 
 
-        <tbody>
+        <div className="summary-box">
 
-        {
-          users.map(user=>(
+          <span>
+            Aktif Kullanıcı
+          </span>
 
-            <tr key={user.id}>
-
-              <td>
-                {user.name ?? "-"}
-              </td>
-
-
-              <td>
-                {user.email}
-              </td>
+          <strong>
+            {
+              users.filter(
+                user=>user.isActive
+              ).length
+            }
+          </strong>
 
 
-              <td>
-                {user.role}
-              </td>
+        </div>
 
 
-              <td>
 
-                {
-                  user.isActive
-                  ?
-                  "Aktif"
-                  :
-                  "Pasif"
-                }
+        <div className="summary-box">
 
-              </td>
+          <span>
+            Pasif Kullanıcı
+          </span>
+
+          <strong>
+            {
+              users.filter(
+                user=>!user.isActive
+              ).length
+            }
+          </strong>
 
 
-              <td>
+        </div>
 
-                {
-                  user.lastLoginAt
-                  ?
-                  user.lastLoginAt.toLocaleDateString("tr-TR")
-                  :
-                  "-"
-                }
 
-              </td>
+      </div>
 
+
+
+
+
+      <div className="table-wrapper">
+
+
+        <table className="users-table">
+
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Kullanıcı
+              </th>
+
+              <th>
+                Email
+              </th>
+
+              <th>
+                Rol
+              </th>
+
+              <th>
+                Durum
+              </th>
+
+              <th>
+                Son Giriş
+              </th>
+
+              <th>
+                İşlem
+              </th>
 
             </tr>
 
 
-          ))
-        }
-
-        </tbody>
+          </thead>
 
 
-      </table>
+
+          <tbody>
+
+
+          {
+            users.map(user=>(
+
+              <tr key={user.id}>
+
+
+                <td>
+
+                  <div className="user-name">
+
+                    <div className="avatar">
+                      {
+                        user.name
+                        ?.charAt(0)
+                        .toUpperCase()
+                        ??
+                        "?"
+                      }
+                    </div>
+
+
+                    <span>
+                      {user.name ?? "-"}
+                    </span>
+
+
+                  </div>
+
+
+                </td>
+
+
+
+                <td>
+                  {user.email}
+                </td>
+
+
+
+                <td>
+
+                  <span className="role-badge">
+
+                    {user.role}
+
+                  </span>
+
+
+                </td>
+
+
+
+                <td>
+
+                  {
+                    user.isActive
+
+                    ?
+
+                    <span className="active-badge">
+                      Aktif
+                    </span>
+
+                    :
+
+                    <span className="passive-badge">
+                      Pasif
+                    </span>
+                  }
+
+
+                </td>
+
+
+
+                <td>
+
+                  {
+                    user.lastLoginAt
+
+                    ?
+
+                    user.lastLoginAt
+                    .toLocaleDateString(
+                      "tr-TR"
+                    )
+
+                    :
+
+                    "-"
+                  }
+
+
+                </td>
+
+
+
+                <td>
+
+                  <Link
+                    href={`/kullanicilar/${user.id}`}
+                    className="table-action"
+                  >
+
+                    Görüntüle
+
+                  </Link>
+
+
+                </td>
+
+
+              </tr>
+
+
+            ))
+          }
+
+
+          </tbody>
+
+
+        </table>
+
+
+      </div>
 
 
     </section>
