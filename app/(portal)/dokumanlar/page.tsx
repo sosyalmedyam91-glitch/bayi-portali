@@ -1,18 +1,187 @@
-// app/dashboard/documents/page.tsx
 "use client";
 
-import React, { useState } from "react";
-
-// Örnek Döküman Verisi (Normalde API'den gelecek)
-const dummyDocuments = [
-  { id: "DOC-091", title: "EYS-50 Kullanım Kılavuzu", category: "Üretim / Teknik", size: "2.4 MB", type: "PDF", updatedAt: "15.06.2026", owner: "Ahmet Yılmaz" },
-  { id: "DOC-092", title: "Satış Sözleşmesi Şablonu v3", category: "Hukuk / Sözleşmeler", size: "412 KB", type: "DOCX", updatedAt: "22.06.2026", owner: "Elif Kaya" },
-  { id: "DOC-093", title: "GK3000 Garanti Sözleşmesi", category: "Hukuk / Sözleşmeler", size: "8.1 MB", type: "XLSX", updatedAt: "24.06.2026", owner: "Can Demir" },
-  { id: "DOC-094", title: "Fabrika Bakım Kılavuzu", category: "Üretim / Teknik", size: "14.2 MB", type: "PDF", updatedAt: "10.05.2026", owner: "Murat Avcı" },
-];
+import React, { useState, useEffect } from "react";
 
 export default function DocumentCenterPage() {
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [documents,setDocuments] =
+  useState<any[]>([]);
+
+  const [loading,setLoading] =
+  useState(true);
+
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [category,setCategory] =
+  useState("teknik");
+
+  useEffect(()=>{
+
+async function loadDocuments(){
+
+try{
+
+const res =
+await fetch(
+"/api/documents"
+);
+
+
+const data =
+await res.json();
+
+
+setDocuments(data);
+
+
+}
+catch(error){
+
+console.error(error);
+
+}
+finally{
+
+setLoading(false);
+
+}
+
+}
+
+
+loadDocuments();
+
+
+},[]);
+
+  const totalDocuments =
+  documents.length;
+
+
+const last30Days =
+documents.filter((doc)=>{
+
+  if(!doc.updatedAt)
+    return false;
+
+
+  const fileDate =
+    new Date(doc.updatedAt);
+
+
+  const now =
+    new Date();
+
+
+  const diff =
+    now.getTime()
+    -
+    fileDate.getTime();
+
+
+  const days =
+    diff /
+    (1000 * 60 * 60 * 24);
+
+
+  return days <= 30;
+
+}).length;
+
+
+
+const financeDocuments =
+documents.filter(doc =>
+  doc.category === "Finans & Hukuk"
+).length;
+
+
+
+const hrDocuments =
+documents.filter(doc =>
+  doc.category === "İK & Yönetmelik"
+).length;
+
+  async function handleUpload(
+  e: React.ChangeEvent<HTMLInputElement>
+) {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  try {
+
+    setUploading(true);
+
+    const formData = new FormData();
+
+    formData.append(
+      "file",
+      file
+    );
+
+    formData.append(
+      "category",
+      category
+    );
+
+    const response = await fetch(
+      "/api/upload",
+      {
+        method:"POST",
+        body:formData
+      }
+    );
+
+
+    const result = await response.json();
+
+
+    if (!response.ok) {
+      throw new Error(result.error);
+    }
+
+
+    alert(
+      "Dosya başarıyla yüklendi"
+    );
+    
+    const refresh =
+await fetch(
+"/api/documents"
+);
+
+const updated =
+await refresh.json();
+
+setDocuments(updated);
+
+    console.log(
+      "R2 URL:",
+      result.url
+    );
+
+
+  } catch(error){
+
+    console.error(error);
+
+    alert(
+      "Yükleme başarısız"
+    );
+
+  } finally {
+
+    setUploading(false);
+
+    if(fileInputRef.current){
+      fileInputRef.current.value="";
+    }
+
+  }
+}
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -24,11 +193,83 @@ export default function DocumentCenterPage() {
           <p className="text-sm text-[#53575A]">Kurumsal dökümanları, kılavuzları ve şablonları güvenli bir şekilde depolayın ve paylaşın.</p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
-          <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-[#EA0029] hover:bg-[#c40022] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+
+          <select
+value={category}
+onChange={(e)=>
+ setCategory(e.target.value)
+}
+className="border rounded-lg px-3 py-2"
+>
+
+<option value="finans-hukuk">
+Finans & Hukuk
+</option>
+
+<option value="ik">
+İK & Yönetmelik
+</option>
+
+<option value="teknik">
+Üretim / Teknik
+</option>
+
+</select>
+
+<button
+onClick={() =>
+  fileInputRef.current?.click()
+}
+disabled={uploading}
+className="group flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-[#EA0029] hover:bg-[#c40022] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 shadow-sm hover:shadow-lg hover:scale-105 cursor-pointer"
+>
             {/* Yükle (Upload) İkonu */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Yeni Dosya Yükle
+<div className="relative w-4.5 h-4.5">
+  {/* Normal ikon */}
+  <svg
+    className="absolute inset-0 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-y-2"
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="17 8 12 3 7 8"/>
+    <line x1="12" y1="3" x2="12" y2="15"/>
+  </svg>
+
+  {/* Hover ikonu */}
+  <svg
+    className="absolute inset-0 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0"
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 5v14"/>
+    <path d="M5 12h14"/>
+  </svg>
+</div>
+            {uploading
+ ? "Yükleniyor..."
+ : "Yeni Dosya Yükle"}
           </button>
+          <input
+ref={fileInputRef}
+type="file"
+className="hidden"
+onChange={handleUpload}
+/>
         </div>
       </div>
 
@@ -39,7 +280,7 @@ export default function DocumentCenterPage() {
         <div className="p-4 bg-white border rounded-xl shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm text-[#53575A] font-medium">Tüm Dökümanlar</p>
-            <p className="text-2xl font-bold text-gray-900">142</p>
+            <p className="text-2xl font-bold text-gray-900">{totalDocuments}</p>
           </div>
           <div className="p-3 bg-gray-50 text-[#53575A] rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -49,7 +290,7 @@ export default function DocumentCenterPage() {
         <div className="p-4 bg-white border rounded-xl shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm text-[#53575A] font-medium">Finans & Hukuk</p>
-            <p className="text-2xl font-bold text-[#EA0029]">38</p>
+            <p className="text-2xl font-bold text-[#EA0029]">{financeDocuments}</p>
           </div>
           <div className="p-3 bg-[rgba(234,0,41,0.06)] text-[#EA0029] rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -59,7 +300,7 @@ export default function DocumentCenterPage() {
         <div className="p-4 bg-white border rounded-xl shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm text-[#53575A] font-medium">İK & Yönetmelik</p>
-            <p className="text-2xl font-bold text-gray-900">24</p>
+            <p className="text-2xl font-bold text-gray-900">{hrDocuments}</p>
           </div>
           <div className="p-3 bg-gray-100 text-[#53575A] rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -69,7 +310,7 @@ export default function DocumentCenterPage() {
         <div className="p-4 bg-white border rounded-xl shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm text-[#53575A] font-medium">Son 30 Gün</p>
-            <p className="text-2xl font-bold text-[#EA0029]">+12 Yeni</p>
+            <p className="text-2xl font-bold text-[#EA0029]">+{last30Days} Yeni</p>
           </div>
           <div className="p-3 bg-[rgba(234,0,41,0.06)] text-[#EA0029] rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -115,9 +356,15 @@ export default function DocumentCenterPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-              {dummyDocuments
-                .filter(doc => doc.title.toLowerCase().includes(searchTerm.toLowerCase()) || doc.category.toLowerCase().includes(searchTerm.toLowerCase()))
-                .map((doc) => (
+              {documents
+.filter(doc =>
+  doc.title
+  ?.toLowerCase()
+  .includes(
+    searchTerm.toLowerCase()
+  )
+)
+.map((doc)=>(
                   <tr key={doc.id} className="hover:bg-gray-50/70 transition-colors">
                     
                     {/* Döküman Adı ve Tür İkonu */}
@@ -139,7 +386,9 @@ export default function DocumentCenterPage() {
                     {/* Kategori */}
                     <td className="py-3.5 px-4">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-[#53575A]">
-                        {doc.category}
+                        <span>
+                          Doküman
+                        </span>
                       </span>
                     </td>
 
@@ -151,7 +400,7 @@ export default function DocumentCenterPage() {
 
                     {/* Sahibi / Yükleyen */}
                     <td className="py-3.5 px-4 text-gray-700 font-medium">
-                      {doc.owner}
+                      R2 Storage
                     </td>
 
                     {/* Son Güncelleme */}
@@ -184,7 +433,12 @@ export default function DocumentCenterPage() {
 
         {/* TABLO ALTI SAYFALAMA */}
         <div className="p-4 border-t bg-gray-50/50 flex justify-between items-center text-xs text-[#53575A]">
-          <span>Toplam {dummyDocuments.length} dökümandan 1-4 arası gösteriliyor</span>
+          <span>
+  {loading
+    ? "Dökümanlar yükleniyor..."
+    : `Toplam ${documents.length} dökümandan 1-${documents.length} arası gösteriliyor`
+  }
+</span>
           <div className="flex gap-2">
             <button className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50" disabled>Önceki</button>
             <button className="px-3 py-1 border rounded bg-white hover:bg-gray-50 disabled:opacity-50" disabled>Sonraki</button>

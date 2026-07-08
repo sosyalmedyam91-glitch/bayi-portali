@@ -4,7 +4,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-xl">
         <div className="px-8 pt-10 pb-6 text-center">
           <h1 className="text-3xl font-bold text-[#53575A]">
-            Hesap Oluştur
+            Bayi Hesabı Oluştur
           </h1>
 
           <p className="mt-3 text-sm text-[#53575A]/70">
