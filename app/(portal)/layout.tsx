@@ -25,7 +25,7 @@ export default async function PortalLayout({
       <div>
 
        <p className="dashboard-subtitle">
-        Hoş geldin {session?.user?.name}
+        Hoş geldin {session?.user?.name},
        </p>
 
        <h1>
