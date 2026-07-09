@@ -64,6 +64,6 @@ export default auth((req)=>{
 
 export const config = {
   matcher: [
-    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|css|js|woff2?)).*)",
+    "/((?!_next|api|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|css|js|otf?)).*)",
   ],
 };

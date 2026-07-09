@@ -1,7 +1,7 @@
-// app/products/page.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { LayoutGrid, List } from "lucide-react";
 
 type Product = {
   id: number;
@@ -64,29 +64,76 @@ const products: Product[] = [
 ];
 
 export default function UrunlerPage() {
+  const [listView, setListView] = useState(true);
   return (
     <main className="container mx-auto px-4 py-8 max-w-7xl space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Ürünler</h1>
-        <p className="mt-1 text-sm text-[#53575A]">Çevre teknolojileri ve atık yönetimi çözümlerimizi inceleyin.</p>
-      </div>
+<div className="flex items-start justify-between gap-4">
+  <div>
+    <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+      Ürünler
+    </h1>
+    <p className="mt-1 text-sm text-[#53575A]">
+      Çevre teknolojileri ve atık yönetimi çözümlerimizi inceleyin.
+    </p>
+  </div>
+
+<div className="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+  <button
+    onClick={() => setListView(false)}
+    className={`flex items-center justify-center p-2 transition ${
+      !listView
+        ? "bg-[#EA0029] text-white"
+        : "text-gray-600 hover:bg-gray-100"
+    }`}
+    title="Kart Görünümü"
+  >
+    <LayoutGrid size={20} />
+  </button>
+
+  <button
+    onClick={() => setListView(true)}
+    className={`flex items-center justify-center p-2 transition ${
+      listView
+        ? "bg-[#EA0029] text-white"
+        : "text-gray-600 hover:bg-gray-100"
+    }`}
+    title="Liste Görünümü"
+  >
+    <List size={20} />
+  </button>
+</div>
+</div>
 
       <hr className="border-gray-200" />
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+  className={
+    listView
+      ? "flex flex-col gap-5"
+      : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+  }
+>
         {products.map((product) => (
           <div
             key={product.id}
-            className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-lg flex flex-col justify-between"
+            className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-lg ${
+  listView
+    ? "flex flex-row items-stretch"
+    : "flex flex-col justify-between"
+}`}
           >
-            <div>
-              <img
-                src={product.image}
-                alt={product.name}
-                className="h-52 w-full object-cover bg-gray-50"
-              />
+            <div className={listView ? "flex flex-1" : ""}>
+<img
+  src={product.image}
+  alt={product.name}
+  className={
+    listView
+      ? "w-72 h-auto object-cover"
+      : "h-52 w-full object-cover bg-gray-50"
+  }
+/>
 
-              <div className="p-4 space-y-2">
+              <div className="p-4 flex-1 space-y-2">
                 <h2 className="text-xl font-bold text-gray-900">{product.name}</h2>
                 <p className="text-sm text-[#53575A] leading-relaxed line-clamp-4">
                   {product.description}
@@ -94,22 +141,45 @@ export default function UrunlerPage() {
               </div>
             </div>
 
-            <div className="p-4 pt-0 mt-auto">
-              <div className="flex items-center justify-between border-t border-gray-100 pt-4">
-                <span className="text-xl font-extrabold text-[#EA0029]">
-                  {product.price.toLocaleString("tr-TR")} ₺
-                </span>
+<div
+  className={
+    listView
+      ? "w-56 border-l border-gray-200 p-6 flex flex-col items-center justify-center gap-5"
+      : "p-4 pt-0 mt-auto"
+  }
+>
+  {listView ? (
+    <>
+<span className="text-xl font-semibold text-[#EA0029]">
+  {product.price.toLocaleString("tr-TR")} ₺
+</span>
 
-                <a 
-                  className="inline-flex items-center justify-center rounded-lg bg-[#EA0029] hover:bg-[#c40022] px-4 py-2 text-sm font-medium text-white transition-colors shadow-sm outline-none focus:ring-2 focus:ring-[rgba(234,0,41,0.15)]" 
-                  href={product.url}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  Ürün Detay
-                </a>
-              </div>
-            </div>
+      <a
+        href={product.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full rounded-lg bg-[#EA0029] py-3 text-center text-sm font-semibold text-white transition hover:bg-[#c40022]"
+      >
+        Ürün Detay
+      </a>
+    </>
+  ) : (
+<div className="w-56 border-l border-gray-200 p-6 flex flex-col items-center justify-center gap-4">
+  <span className="text-2xl font-bold text-[#EA0029]">
+    {product.price.toLocaleString("tr-TR")} ₺
+  </span>
+
+  <a
+    href={product.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="w-full rounded-lg bg-[#EA0029] py-2.5 text-center text-sm font-medium text-white transition hover:bg-[#c40022]"
+  >
+    Ürün Detay
+  </a>
+</div>
+  )}
+</div>
           </div>
         ))}
       </div>

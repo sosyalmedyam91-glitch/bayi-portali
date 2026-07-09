@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@theme {
+  /* Tailwind v4'te yeni font tanımlama şekli */
+  --font-din: var(--font-din), sans-serif;
+}
+
+@font-face {
+  font-family: "DIN Pro";
+  src: url("/fonts/DINPro-Regular.otf") format("otf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DIN Pro";
+  src: url("/fonts/DINPro-Bold.otf") format("otf");
+  font-weight: 700;
+}
 
 :root {
   --background: #ffffff;
@@ -13,16 +29,6 @@
   --gray-border: #E5E7EB;
   --gray-bg: #F8FAFC;
 }
-
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 
 * {
   box-sizing:border-box;
