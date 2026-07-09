@@ -3,6 +3,12 @@ export const runtime = "nodejs";
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { r2 } from "@/lib/r2";
 
+console.log({
+  accountId: process.env.R2_ACCOUNT_ID,
+  bucket: process.env.R2_BUCKET_NAME,
+  accessKey: !!process.env.R2_ACCESS_KEY_ID,
+  secretKey: !!process.env.R2_SECRET_ACCESS_KEY,
+});
 
 export async function GET() {
 
@@ -53,21 +59,21 @@ export async function GET() {
     return Response.json(files);
 
 
-  } catch(error){
+  } catch (error: any) {
+  console.error("R2 Error:", error);
 
-    console.error(error);
-
-
-    return Response.json(
-      {
-        error:"Dosyalar alınamadı"
-      },
-      {
-        status:500
-      }
-    );
-
-  }
+  return Response.json(
+    {
+      name: error?.name,
+      message: error?.message,
+      metadata: error?.$metadata,
+      stack: process.env.NODE_ENV === "development" ? error?.stack : undefined,
+    },
+    {
+      status: 500,
+    }
+  );
+}
 
 }
 
