@@ -7,13 +7,13 @@
 
 @font-face {
   font-family: "DIN Pro";
-  src: url("/fonts/DINPro-Regular.otf") format("otf");
+  src: url("/fonts/DINPro-Regular.otf") format("opentype");
   font-weight: 400;
 }
 
 @font-face {
   font-family: "DIN Pro";
-  src: url("/fonts/DINPro-Bold.otf") format("otf");
+  src: url("/fonts/DINPro-Bold.otf") format("opentype");
   font-weight: 700;
 }
 
@@ -811,28 +811,34 @@ body {
 
 }
 
-
-
 /* BADGES */
 
-
-.role-badge{
-
-    background:#EDE9FE;
-
-    color:#6D28D9;
-
-    padding:5px 12px;
-
-    border-radius:20px;
-
+.role-super-admin{
+    background:#FEE2E2;
+    color:#B91C1C;
+    padding:6px 12px;
+    border-radius:999px;
     font-size:12px;
-
-    font-weight:600;
-
+    font-weight:700;
 }
 
+.role-admin{
+    background:#DBEAFE;
+    color:#1D4ED8;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
 
+.role-specialist{
+    background:#DCFCE7;
+    color:#15803D;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
 
 .active-badge{
 
@@ -914,47 +920,82 @@ body {
 ========================== */
 
 
-.create-user-page{
+.create-user-page {
 
-    min-height:600px;
+    width:100%;
+
+    max-width:1100px;
+
+    margin:0 auto;
+
+    padding:40px 20px;
 
 }
 
 
+/* HEADER */
 
-.create-user-header{
+.create-user-header {
 
     display:flex;
 
     justify-content:space-between;
 
-    align-items:center;
+    align-items:flex-start;
 
-    margin-bottom:30px;
+    gap:30px;
+
+    margin-bottom:35px;
 
 }
 
 
+.create-user-header h1 {
 
-.create-user-header h1{
+    margin:8px 0;
 
-    margin:8px 0 0;
+    font-size:34px;
 
-    font-size:28px;
+    font-weight:700;
 
     color:#53575A;
 
 }
 
 
+.page-description {
 
-.secondary-button{
+    margin-top:10px;
 
-    padding:12px 18px;
+    color:#64748B;
+
+    font-size:15px;
+
+    line-height:1.6;
+
+}
+
+
+
+/* BACK BUTTON */
+
+.secondary-button {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    height:46px;
+
+    padding:0 20px;
 
     border-radius:14px;
 
     border:1px solid #D5D7D8;
+
+    background:white;
 
     color:#53575A;
 
@@ -962,15 +1003,12 @@ body {
 
     font-weight:600;
 
-    background:white;
-
     transition:.2s;
 
 }
 
 
-
-.secondary-button:hover{
+.secondary-button:hover {
 
     border-color:#EA0029;
 
@@ -980,49 +1018,55 @@ body {
 
 
 
-/* FORM CONTAINER */
+/* FORM CARD */
 
 
-.form-card{
+.form-card {
 
-    max-width:700px;
+    width:100%;
 
-    background:white;
+    background:#fff;
 
     border:1px solid #E5E7EB;
 
-    border-radius:20px;
+    border-radius:24px;
 
-    padding:30px;
+    padding:40px;
 
-}
+    box-shadow:
 
-
-
-.form-info{
-
-    padding-bottom:20px;
-
-    margin-bottom:25px;
-
-    border-bottom:
-    1px solid #E5E7EB;
+    0 15px 40px rgba(15,23,42,.06);
 
 }
 
 
 
-.form-info h2{
+/* INFO */
+
+
+.form-info {
+
+    padding-bottom:25px;
+
+    margin-bottom:30px;
+
+    border-bottom:1px solid #E5E7EB;
+
+}
+
+
+.form-info h2 {
 
     margin:0 0 8px;
+
+    font-size:20px;
 
     color:#53575A;
 
 }
 
 
-
-.form-info p{
+.form-info p {
 
     margin:0;
 
@@ -1030,16 +1074,30 @@ body {
 
 }
 
-/* =====================
-   USER FORM
-===================== */
 
 
-.user-form{
+/* USER FORM */
+
+
+.user-form {
 
     display:flex;
 
     flex-direction:column;
+
+    gap:30px;
+
+}
+
+
+
+.form-grid {
+
+    display:grid;
+
+    grid-template-columns:
+
+    repeat(3,1fr);
 
     gap:25px;
 
@@ -1047,20 +1105,10 @@ body {
 
 
 
-.form-grid{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(2,1fr);
-
-    gap:20px;
-
-}
+/* INPUT */
 
 
-
-.user-form label{
+.user-form label {
 
     display:flex;
 
@@ -1070,29 +1118,24 @@ body {
 
     font-size:14px;
 
-    font-weight:600;
+    font-weight:700;
 
     color:#53575A;
 
 }
 
-
-
 .user-form input,
-.user-form select{
+.user-form select {
 
+    height:52px;
 
     width:100%;
 
-    height:48px;
-
-    padding:0 15px;
+    padding:0 16px;
 
     border-radius:14px;
 
-    border:
-
-    1px solid #D5D7D8;
+    border:1px solid #D5D7D8;
 
     background:white;
 
@@ -1106,17 +1149,17 @@ body {
 
 
 
-.user-form input::placeholder{
+.user-form input:hover,
+.user-form select:hover {
 
-    color:#94A3B8;
+    border-color:#B8BDC5;
 
 }
 
 
 
 .user-form input:focus,
-.user-form select:focus{
-
+.user-form select:focus {
 
     outline:none;
 
@@ -1124,49 +1167,46 @@ body {
 
     box-shadow:
 
-    0 0 0 4px
-
-    rgba(234,0,41,.12);
+    0 0 0 4px rgba(234,0,41,.12);
 
 }
 
 
 
-/* BUTTON AREA */
+/* BUTTON */
 
 
-.form-actions{
+.form-actions {
 
     display:flex;
 
     justify-content:flex-end;
 
-    border-top:
+    padding-top:25px;
 
-    1px solid #E5E7EB;
-
-    padding-top:20px;
+    border-top:1px solid #E5E7EB;
 
 }
 
 
 
-.form-actions button{
+.form-actions button {
 
+    height:52px;
+
+    min-width:220px;
+
+    border:none;
+
+    border-radius:14px;
 
     background:#EA0029;
 
     color:white;
 
-    border:none;
-
-    padding:
-
-    14px 28px;
-
-    border-radius:14px;
-
     font-weight:700;
+
+    font-size:15px;
 
     cursor:pointer;
 
@@ -1176,35 +1216,239 @@ body {
 
 
 
-.form-actions button:hover{
+.form-actions button:hover {
 
     background:#C70024;
+
+    transform:translateY(-1px);
 
 }
 
 
 
+/* RESPONSIVE */
 
-@media(max-width:768px){
 
-    .form-grid{
+@media(max-width:900px){
+
+
+    .form-grid {
 
         grid-template-columns:1fr;
 
     }
 
 
-    .form-actions{
+}
+
+
+
+@media(max-width:768px){
+
+
+    .create-user-page {
+
+        padding:20px;
+
+    }
+
+
+    .create-user-header {
+
+        flex-direction:column;
+
+    }
+
+
+    .form-card {
+
+        padding:25px;
+
+    }
+
+
+    .form-actions {
 
         justify-content:stretch;
 
     }
 
 
-    .form-actions button{
+    .form-actions button {
 
         width:100%;
 
     }
 
+
+}
+
+/* =========================
+   GLOBAL MOBILE FIXES
+========================= */
+
+
+/* Dashboard mobile */
+@media(max-width:768px){
+
+
+    .dashboard-page{
+
+        display:flex;
+
+        flex-direction:column;
+
+        padding:15px;
+
+        gap:15px;
+
+    }
+
+
+    .dashboard-sidebar{
+
+        width:100%;
+
+        padding:18px;
+
+        border-radius:18px;
+
+    }
+
+
+    .sidebar-nav{
+
+        display:flex;
+
+        overflow-x:auto;
+
+        gap:8px;
+
+        margin-top:20px;
+
+    }
+
+
+    .sidebar-nav a{
+
+        white-space:nowrap;
+
+        padding:10px 14px;
+
+    }
+
+
+    .dashboard-header h1{
+
+        font-size:22px;
+
+    }
+
+
+    .dashboard-main{
+
+        gap:18px;
+
+    }
+
+
+    .stat-card{
+
+        padding:16px;
+
+    }
+
+
+    .panel{
+
+        padding:18px;
+
+        overflow:hidden;
+
+    }
+
+
+    .panel table{
+
+        min-width:650px;
+
+    }
+
+
+    .table-wrapper{
+
+        overflow-x:auto;
+
+        width:100%;
+
+    }
+
+}
+
+
+
+/* Çok küçük ekranlar */
+@media(max-width:480px){
+
+
+    .dashboard-page{
+
+        padding:10px;
+
+    }
+
+
+    .stat-card{
+
+        gap:12px;
+
+    }
+
+
+    .stat-icon{
+
+        width:40px;
+
+        height:40px;
+
+        font-size:18px;
+
+    }
+
+
+    .stat-card h2{
+
+        font-size:22px;
+
+    }
+
+
+    .panel h3{
+
+        font-size:17px;
+
+    }
+
+
+    .create-user-page{
+
+        padding:15px;
+
+    }
+
+
+    .form-card{
+
+        padding:18px;
+
+        border-radius:18px;
+
+    }
+
+
+}
+
+.table-wrapper{
+  overflow-x:auto;
+  width:100%;
 }

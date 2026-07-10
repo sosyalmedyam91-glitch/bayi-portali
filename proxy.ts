@@ -3,63 +3,34 @@ import { NextResponse } from "next/server";
 
 import { canAccessRoute } from "@/lib/permissions";
 
-export default auth((req)=>{
+export default auth((req) => {
+  const { pathname } = req.nextUrl;
 
- const {pathname} =
- req.nextUrl;
+  if (
+    pathname === "/" ||
+    pathname === "/kayit-ol" ||
+    pathname.startsWith("/api/auth")
+  ) {
+    return NextResponse.next();
+  }
 
- if(
-  pathname === "/" ||
-  pathname === "/kayit-ol" ||
-  pathname.startsWith("/api/auth")
- ){
+  if (!req.auth) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  const role = req.auth.user.role;
+
+  if (!role) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  const allowed = canAccessRoute(pathname, role);
+
+  if (!allowed) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
 
   return NextResponse.next();
-
- }
-
-
- if(!req.auth){
-
-  return NextResponse.redirect(
-   new URL("/", req.url)
-  );
-
- }
-
-
- const role =
- req.auth.user.role;
-
-
- if(!role){
-
-  return NextResponse.redirect(
-   new URL("/", req.url)
-  );
-
- }
-
-
- const allowed =
- canAccessRoute(
-  pathname,
-  role
- );
-
-
- if(!allowed){
-
-  return NextResponse.redirect(
-   new URL("/dashboard", req.url)
-  );
-
- }
-
-
- return NextResponse.next();
-
-
 });
 
 export const config = {

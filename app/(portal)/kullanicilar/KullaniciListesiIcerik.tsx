@@ -65,6 +65,22 @@ export default function KullaniciListesiIcerik({
     }
   };
 
+  const getRoleLabel = (role: string) => {
+    switch (role) {
+      case "SUPER_ADMIN":
+        return "Super Admin";
+
+      case "ADMIN":
+        return "Admin";
+
+      case "SPECIALIST":
+        return "Specialist";
+
+      default:
+        return role;
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* ÖZET İSTATİSTİK KUTULARI (Filtrelenmiş veriye göre anlık güncellenir) */}
@@ -213,7 +229,7 @@ export default function KullaniciListesiIcerik({
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium uppercase tracking-wide ${getRoleBadgeClass(user.role)}`}
                           >
-                            {user.role}
+                            {getRoleLabel(user.role)}
                           </span>
                         </td>
                         <td className="py-3 px-4">

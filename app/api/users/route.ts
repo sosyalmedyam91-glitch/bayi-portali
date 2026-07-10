@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { UserRole } from "@prisma/client";
 
 export async function GET() {
   try {
@@ -66,12 +68,28 @@ export async function GET() {
     }
 
     // Veriyi Biçimlendirme
-    const formattedUsers = allUsers.map((user: any) => ({
-      id: user.id,
-      name: user.displayName,
-      email: user.mail || "",
-      department: user.department || "Belirtilmemiş",
-    }));
+    const formattedUsers = await Promise.all(
+      allUsers.map(async (user: any) => {
+        const localUser = await prisma.user.findUnique({
+          where: {
+            id: user.id,
+          },
+        });
+
+        return {
+          id: user.id,
+          name: user.displayName,
+          email: user.mail || "",
+          department: user.department || "Belirtilmemiş",
+
+          role: localUser?.role || UserRole.SPECIALIST,
+
+          isActive: localUser?.isActive ?? true,
+
+          lastLoginAt: localUser?.lastLoginAt || null,
+        };
+      }),
+    );
 
     return NextResponse.json(formattedUsers);
   } catch (error) {

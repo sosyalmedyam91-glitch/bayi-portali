@@ -63,7 +63,7 @@ export async function GET(
       name: graphUser.displayName,
       email: graphUser.mail || "",
       department: graphUser.department || "Belirtilmemiş",
-      role: localUser?.role || "BAYI", // Şemanızdaki default değer olan BAYI'yi verdik
+      role: localUser?.role || UserRole.SPECIALIST,
       isActive: localUser ? localUser.isActive : true,
     };
 
@@ -94,7 +94,9 @@ export async function PATCH(
     const { role, isActive, email } = body;
 
     // Gelen string rol değerini Prisma'nın beklediği UserRole Enum tipine güvenli şekilde cast ediyoruz
-    const validatedRole = role as UserRole;
+    const validatedRole = Object.values(UserRole).includes(role)
+      ? (role as UserRole)
+      : UserRole.SPECIALIST;
 
     // Microsoft GUID'si ile yerelde upsert yapıyoruz
     const updatedUser = await prisma.user.upsert({

@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { UserRole } from "@prisma/client";
 
 interface UserFormProps {
   user: {
     id: string;
     name: string;
     email: string;
-    role: string;
+    role: UserRole;
     isActive: boolean;
     department?: string;
   };
@@ -16,7 +17,7 @@ interface UserFormProps {
 
 export default function UserEditForm({ user }: UserFormProps) {
   const router = useRouter();
-  const [role, setRole] = useState(user.role);
+  const [role, setRole] = useState<UserRole>(user.role as UserRole);
   const [isActive, setIsActive] = useState(user.isActive);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
@@ -113,14 +114,19 @@ export default function UserEditForm({ user }: UserFormProps) {
           <label className="text-xs font-bold text-gray-700 uppercase">
             Yetki Rolü Atayın
           </label>
+          <p className="text-xs text-gray-400">
+            Kullanıcının sistem içerisindeki erişim seviyesini belirler.
+          </p>
           <select
             value={role}
-            onChange={(e) => setRole(e.target.value)}
+            onChange={(e) => setRole(e.target.value as UserRole)}
             className="w-full p-2.5 border rounded-lg bg-white text-sm focus:ring-2 focus:ring-red-500/20 focus:border-[#EA0029] transition-all outline-none"
           >
-            <option value="SPECIALIST">Uzman / Specialist</option>
-            <option value="ADMIN">Admin</option>
-            <option value="SUPER_ADMIN">Super Admin</option>
+            <option value="SUPER_ADMIN">👑 Super Admin</option>
+
+            <option value="ADMIN">🛠️ Admin</option>
+
+            <option value="SPECIALIST">👤 Specialist</option>
           </select>
         </div>
 

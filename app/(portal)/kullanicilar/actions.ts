@@ -3,15 +3,10 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { ROLES } from "@/lib/roles";
+import { ROLES, UserRole } from "@/lib/roles";
 
-
-export async function createUser(
-  formData: FormData
-) {
-
+export async function createUser(formData: FormData) {
   const session = await auth();
-
 
   if (
     session?.user?.role !== ROLES.ADMIN &&
@@ -20,59 +15,41 @@ export async function createUser(
     throw new Error("Yetkisiz erişim");
   }
 
+  const name = String(formData.get("name"));
 
-  const name =
-    String(formData.get("name"));
+  const email = String(formData.get("email"));
 
+  const roleValue = String(formData.get("role"));
 
-  const email =
-    String(formData.get("email"));
-
-
-  const role =
-    String(formData.get("role")) as any;
-
-
-
-  const existingUser =
-    await prisma.user.findUnique({
-      where:{
-        email
-      }
-    });
-
-
-  if(existingUser){
-
-    throw new Error(
-      "Bu kullanıcı zaten kayıtlı"
-    );
-
+  if (!Object.values(UserRole).includes(roleValue as UserRole)) {
+    throw new Error("Geçersiz kullanıcı rolü");
   }
 
+  const role = roleValue as UserRole;
 
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (existingUser) {
+    throw new Error("Bu kullanıcı zaten kayıtlı");
+  }
 
   await prisma.user.create({
-
-    data:{
-
+    data: {
       name,
 
       email,
 
       role,
 
-      passwordHash:
-        "ENTRA_ONLY",
+      passwordHash: "ENTRA_ONLY",
 
-      isActive:true,
-
-    }
-
+      isActive: true,
+    },
   });
 
-
-
   redirect("/kullanicilar");
-
 }

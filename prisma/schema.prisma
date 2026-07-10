@@ -22,7 +22,7 @@ model User {
   name              String?
 
   // Yetkilendirme
-  role              UserRole  @default(BAYI)
+  role              UserRole  @default(SPECIALIST)
 
   // Hesap durumu
   isActive          Boolean   @default(true)
@@ -44,10 +44,7 @@ model User {
 }
 
 enum UserRole {
-  USER
-  BAYI
-  DEPO
-  FINANS
-  ADMIN
   SUPER_ADMIN
+  ADMIN
+  SPECIALIST
 }
