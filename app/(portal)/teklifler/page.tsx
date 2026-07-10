@@ -632,7 +632,7 @@ export default function QuotesPage() {
 
                           return Object.keys(groups).map((dept) => (
                             <div key={dept} className="space-y-0.5">
-                              <div className="text-[10px] font-bold text-gray-400 bg-gray-50 px-2.5 py-1 rounded tracking-wider uppercase sticky top-0 bg-white z-10">
+                              <div className="text-[10px] font-bold text-gray-400 bg-gray-50 px-2.5 py-1 rounded tracking-wider uppercase sticky top-0 z-10">
                                 {dept}
                               </div>
                               {groups[dept].map((u) => (

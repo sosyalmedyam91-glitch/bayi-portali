@@ -259,7 +259,7 @@ export default function TasksPage() {
                       setSearchTerm("");
                     }
                   }}
-                  className={`w-full px-3 py-2 border border-[#53575A]/20 rounded-lg bg-white text-sm cursor-pointer min-h-[38px] flex flex-wrap gap-1 items-center justify-between focus-within:ring-2 focus-within:ring-[#EA0029] ${
+                  className={`w-full px-3 py-2 border border-[#53575A]/20 rounded-lg bg-white text-sm cursor-pointer min-h-9.5 flex flex-wrap gap-1 items-center justify-between focus-within:ring-2 focus-within:ring-[#EA0029] ${
                     loadingUsers || userError
                       ? "bg-gray-50 cursor-not-allowed"
                       : ""
