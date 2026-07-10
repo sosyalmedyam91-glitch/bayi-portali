@@ -1,310 +1,73 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { ROLES } from "@/lib/roles";
 import Link from "next/link";
+import KullaniciListesiIcerik from "./KullaniciListesiIcerik";
 
+console.log(typeof KullaniciListesiIcerik);
+console.log(KullaniciListesiIcerik);
 
-export default async function KullaniciYonetimi(){
+interface ApiUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  department?: string;
+  lastLoginAt?: string | null;
+}
 
+export default async function KullaniciYonetimi() {
   const session = await auth();
 
-
-  if(
+  // Yetki Kontrolü
+  if (
     session?.user?.role !== ROLES.ADMIN &&
     session?.user?.role !== ROLES.SUPER_ADMIN
-  ){
-
+  ) {
     redirect("/dashboard");
-
   }
 
+  let users: ApiUser[] = [];
 
+  try {
+    const res = await fetch("http://localhost:3000/api/users", {
+      cache: "no-store",
+    });
 
-  const users = await prisma.user.findMany({
-
-    orderBy:{
-      createdAt:"desc"
+    if (res.ok) {
+      users = await res.json();
     }
-
-  });
-
-
+  } catch (error) {
+    console.error("Kullanıcılar API'den çekilirken hata oluştu:", error);
+  }
 
   return (
-
-    <section className="panel user-management">
-
-
-      <div className="user-header">
-
-
+    <section className="p-6 max-w-7xl mx-auto space-y-6 bg-white border rounded-xl shadow-sm">
+      {/* ÜST BAŞLIK VE AKSİYON */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-
-          <p className="dashboard-subtitle">
-            Sistem kullanıcıları
-          </p>
-
-
-          <h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
             Kullanıcı Yönetimi
           </h1>
-
-
+          <p className="text-sm text-[#53575A]">
+            Şirket personellerini departman kırılımlarına göre listeleyin. Arama
+            alanını kullanarak anlık filtreleme yapabilirsiniz.
+          </p>
         </div>
-
-
 
         <Link
           href="/kullanicilar/yeni"
-          className="primary-button"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#EA0029] hover:bg-[#c40022] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
         >
-
-          + Yeni Kullanıcı
-
+          + Yeni Kullanıcı Ekle
         </Link>
-
-
       </div>
 
+      <hr className="border-gray-200" />
 
-
-
-      <div className="user-summary">
-
-
-        <div className="summary-box">
-
-          <span>
-            Toplam Kullanıcı
-          </span>
-
-          <strong>
-            {users.length}
-          </strong>
-
-
-        </div>
-
-
-
-        <div className="summary-box">
-
-          <span>
-            Aktif Kullanıcı
-          </span>
-
-          <strong>
-            {
-              users.filter(
-                user=>user.isActive
-              ).length
-            }
-          </strong>
-
-
-        </div>
-
-
-
-        <div className="summary-box">
-
-          <span>
-            Pasif Kullanıcı
-          </span>
-
-          <strong>
-            {
-              users.filter(
-                user=>!user.isActive
-              ).length
-            }
-          </strong>
-
-
-        </div>
-
-
-      </div>
-
-
-
-
-
-      <div className="table-wrapper">
-
-
-        <table className="users-table">
-
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Kullanıcı
-              </th>
-
-              <th>
-                Email
-              </th>
-
-              <th>
-                Rol
-              </th>
-
-              <th>
-                Durum
-              </th>
-
-              <th>
-                Son Giriş
-              </th>
-
-              <th>
-                İşlem
-              </th>
-
-            </tr>
-
-
-          </thead>
-
-
-
-          <tbody>
-
-
-          {
-            users.map(user=>(
-
-              <tr key={user.id}>
-
-
-                <td>
-
-                  <div className="user-name">
-
-                    <div className="avatar">
-                      {
-                        user.name
-                        ?.charAt(0)
-                        .toUpperCase()
-                        ??
-                        "?"
-                      }
-                    </div>
-
-
-                    <span>
-                      {user.name ?? "-"}
-                    </span>
-
-
-                  </div>
-
-
-                </td>
-
-
-
-                <td>
-                  {user.email}
-                </td>
-
-
-
-                <td>
-
-                  <span className="role-badge">
-
-                    {user.role}
-
-                  </span>
-
-
-                </td>
-
-
-
-                <td>
-
-                  {
-                    user.isActive
-
-                    ?
-
-                    <span className="active-badge">
-                      Aktif
-                    </span>
-
-                    :
-
-                    <span className="passive-badge">
-                      Pasif
-                    </span>
-                  }
-
-
-                </td>
-
-
-
-                <td>
-
-                  {
-                    user.lastLoginAt
-
-                    ?
-
-                    user.lastLoginAt
-                    .toLocaleDateString(
-                      "tr-TR"
-                    )
-
-                    :
-
-                    "-"
-                  }
-
-
-                </td>
-
-
-
-                <td>
-
-                  <Link
-                    href={`/kullanicilar/${user.id}`}
-                    className="table-action"
-                  >
-
-                    Görüntüle
-
-                  </Link>
-
-
-                </td>
-
-
-              </tr>
-
-
-            ))
-          }
-
-
-          </tbody>
-
-
-        </table>
-
-
-      </div>
-
-
+      {/* ARAMA VE TABLOLARI BARINDIRAN ETKİLEŞİMLİ BİLEŞEN */}
+      <KullaniciListesiIcerik initialUsers={users} />
     </section>
-
   );
-
 }

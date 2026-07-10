@@ -1,0 +1,30 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env.production
+        - echo "DIRECT_URL=$DIRECT_URL" >> .env.production
+        - echo "AUTH_SECRET=$AUTH_SECRET" >> .env.production
+        - echo "AUTH_URL=$AUTH_URL" >> .env.production
+        - echo "AUTH_MICROSOFT_ID=$AUTH_MICROSOFT_ID" >> .env.production
+        - echo "AUTH_MICROSOFT_SECRET=$AUTH_MICROSOFT_SECRET" >> .env.production
+        - echo "AUTH_MICROSOFT_TENANT_ID=$AUTH_MICROSOFT_TENANT_ID" >> .env.production
+        - npx prisma generate
+        # AWS'deki DATABASE_URL'i derleme ortamındaki .env dosyasına yazar:
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env
+        # Prisma istemcisini (client) generate eder:
+        - npx prisma generate
+    build:
+      commands:
+        - env | grep '^R2_' >> .env.production
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
