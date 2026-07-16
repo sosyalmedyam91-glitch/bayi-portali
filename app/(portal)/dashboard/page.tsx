@@ -1,3 +1,5 @@
+import ThemeToggle from "@/components/theme-toggle";
+<ThemeToggle />;
 export default function Dashboard() {
   const cards = [
     {
@@ -30,7 +32,7 @@ export default function Dashboard() {
             <div className="stat-icon">{card.icon}</div>
 
             <div>
-              <p>{card.title}</p>
+              <p className="text-gray-600 dark:text-gray-300">{card.title}</p>
               <h2>{card.value}</h2>
             </div>
           </div>

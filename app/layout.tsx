@@ -1,23 +1,21 @@
 import "./globals.css";
 import { Providers } from "./providers";
-import localFont from 'next/font/local';
+import localFont from "next/font/local";
 
-// 1. Fontu tanımlıyoruz
 const dinPro = localFont({
   src: [
     {
-      path: '../public/fonts/DINPro-Regular.otf',
-      weight: '400',
-      style: 'normal',
+      path: "../public/fonts/DINPro-Regular.otf",
+      weight: "400",
+      style: "normal",
     },
     {
-      path: '../public/fonts/DINPro-Bold.otf',
-      weight: '700',
-      style: 'normal',
+      path: "../public/fonts/DINPro-Bold.otf",
+      weight: "700",
+      style: "normal",
     },
   ],
-  // Tailwind içinde kullanabilmek için bir CSS değişkeni atıyoruz
-  variable: '--font-din', 
+  variable: "--font-din",
 });
 
 export const metadata = {
@@ -30,14 +28,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
-    
-    <html lang="tr" className={`${dinPro.variable}`}>
+    <html lang="tr" className={`${dinPro.variable}`} suppressHydrationWarning>
       <body>
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

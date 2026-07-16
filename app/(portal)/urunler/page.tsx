@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { LayoutGrid, List } from "lucide-react";
+import Image from "next/image";
 
 type Product = {
   id: number;
@@ -10,179 +11,254 @@ type Product = {
   price: number;
   image: string;
   url: string;
+  document?: string;
+  category: "Atık Yönetimi" | "Geri Dönüşüm";
 };
 
 const products: Product[] = [
   {
     id: 1,
     name: "Mobil Geri Dönüşüm Makineleri",
-    description: "Mobil Geri Dönüşüm Makineleri, atık malzemeleri geri dönüştürmek için kullanılan taşınabilir cihazlardır. Bu makineler, plastik, metal, cam ve kağıt gibi çeşitli atık türlerini işleyebilir ve yeniden kullanılabilir malzemelere dönüştürebilir. Mobil geri dönüşüm makineleri, çevre dostu bir yaklaşım sunar ve atık yönetimini daha verimli hale getirir.",
-    price: 169900, // .toLocaleString ile düzgün biçimlenmesi için number formatı düzeltildi
-    image: "images/eys-6-upper-right.jpg",
-    url: "https://e-y-s.com/en/environmental-technology/mobile-recycling-machines/"
+    description:
+      "Atık malzemeleri geri dönüştürmek için kullanılan taşınabilir geri dönüşüm çözümleri.",
+    price: 169900,
+    image: "/images/eys-6-upper-right.jpg",
+    url: "https://e-y-s.com/en/environmental-technology/mobile-recycling-machines",
+    document:
+      "https://www.eys-gmbh.de/wp-content/uploads/T-14-01-Mobile-Recyclingmaschinen-Katalog.pdf",
+    category: "Geri Dönüşüm",
   },
   {
     id: 2,
     name: "EYS - 50",
-    description: "Yeni nesil Kompost Makinesi, organik atıkları hızlı ve etkili bir şekilde kompost haline getirir. EYS - 50, enerji verimliliği yüksek motoru ve kullanıcı dostu arayüzü ile öne çıkar. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. EYS - 50, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    description:
+      "Organik atıkları hızlı ve verimli şekilde kompost haline getiren yeni nesil kompost makinesi.",
     price: 19999,
-    image: "images/eys-50-front-up.jpg",
-    url: "https://e-y-s.com/en/environmental-technology/mobile-recycling-machines/"
+    image: "/images/eys-50-front-up.jpg",
+    url: "https://e-y-s.com/en/environmental-technology/self-propelled-turner",
+    document:
+      "https://www.eys-gmbh.de/wp-content/uploads/T-14-01-Mobile-Recyclingmaschinen-Katalog.pdf#page=13",
+    category: "Geri Dönüşüm",
   },
   {
     id: 3,
     name: "Kompost Tamburu",
-    description: "Kompost Tamburu, organik atıkları etkili bir şekilde kompost haline getirir. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Kompost Tamburu, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    description:
+      "Organik atıkların doğal süreçlerle kompostlaştırılmasını sağlayan çözüm.",
     price: 2499,
-    image: "images/bedding-composter-11.jpg",
-    url: "https://e-y-s.com/en/environmental-technology/mobile-recycling-machines/"
+    image: "/images/bedding-composter-11.jpg",
+    url: "https://e-y-s.com/en/environmental-technology/bedding-composter",
+    document:
+      "https://www.eys-gmbh.de/wp-content/uploads/EYS-Bedding-Composter.pdf",
+    category: "Atık Yönetimi",
   },
   {
     id: 4,
     name: "Seperatör Makinesi",
-    description: "Seperatör Makinesi, atık malzemeleri ayırarak geri dönüştürme işlemi yapar. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Seperatör Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    description: "Katı ve sıvı atıkları ayırarak etkin atık yönetimi sağlar.",
     price: 55000,
-    image: "images/vidali-pres-seperator.jpg",
-    url: "https://e-y-s.com/en/products-industries/eys-screw-press-manure-separators/"
+    image: "/images/vidali-pres-seperator.jpg",
+    url: "https://e-y-s.com/en/products-industries/eys-screw-press-manure-separators",
+    document:
+      "https://www.eys-gmbh.de/wp-content/uploads/Screw-Press-Separators.pdf",
+    category: "Atık Yönetimi",
   },
   {
     id: 5,
     name: "Karıştırıcı Makinesi",
-    description: "Karıştırıcı Makinesi, organik atıkları etkili bir şekilde karıştırarak kompost sürecini hızlandırır. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Karıştırıcı Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    description:
+      "Kompost sürecini hızlandırmak için organik malzemeleri karıştırır.",
     price: 44000,
-    image: "images/dalgic-karistirici.jpg",
-    url: "https://e-y-s.com/en/manure-management/submersible-mixer/"
+    image: "/images/dalgic-karistirici.jpg",
+    url: "https://e-y-s.com/en/manure-management/submersible-mixer/",
+    document:
+      "https://www.eys-gmbh.de/wp-content/uploads/Submersible-Mixers.pdf",
+    category: "Atık Yönetimi",
   },
   {
     id: 6,
     name: "Sıyırıcı Makinesi",
-    description: "Sıyırıcı Makinesi, atık malzemeleri etkili bir şekilde sıyırarak geri dönüştürme işlemi yapar. Kompakt tasarımı sayesinde sınırlı alanlarda bile rahatlıkla kullanılabilir. Sıyırıcı Makinesi, çevre bilincine sahip bireyler ve işletmeler için ideal bir çözümdür.",
+    description: "Atıkların etkin şekilde toplanmasını ve işlenmesini sağlar.",
     price: 67000,
-    image: "images/gubre-siyirici.jpg",
-    url: "https://e-y-s.com/en/products-industries/eys-manure-scraper/"
+    image: "/images/gubre-siyirici.jpg",
+    url: "https://e-y-s.com/en/products-industries/eys-manure-scraper",
+    document: "https://www.eys-gmbh.de/wp-content/uploads/Scrapers.pdf",
+    category: "Atık Yönetimi",
   },
 ];
 
 export default function UrunlerPage() {
   const [listView, setListView] = useState(true);
+
+  const categories = ["Atık Yönetimi", "Geri Dönüşüm"] as const;
+
   return (
-    <main className="container mx-auto px-4 py-8 max-w-7xl space-y-6">
-<div className="flex items-start justify-between gap-4">
-  <div>
-    <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-      Ürünler
-    </h1>
-    <p className="mt-1 text-sm text-[#53575A]">
-      Çevre teknolojileri ve atık yönetimi çözümlerimizi inceleyin.
-    </p>
-  </div>
+    <main className="container mx-auto max-w-7xl space-y-8 px-4 py-8">
+      {/* HEADER */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Ürünler</h1>
 
-<div className="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-  <button
-    onClick={() => setListView(false)}
-    className={`flex items-center justify-center p-2 transition ${
-      !listView
-        ? "bg-[#EA0029] text-white"
-        : "text-gray-600 hover:bg-gray-100"
-    }`}
-    title="Kart Görünümü"
-  >
-    <LayoutGrid size={20} />
-  </button>
+          <p className="mt-2 text-sm text-[#53575A]">
+            Atık yönetimi ve geri dönüşüm teknolojilerimizi inceleyin.
+          </p>
+        </div>
 
-  <button
-    onClick={() => setListView(true)}
-    className={`flex items-center justify-center p-2 transition ${
-      listView
-        ? "bg-[#EA0029] text-white"
-        : "text-gray-600 hover:bg-gray-100"
-    }`}
-    title="Liste Görünümü"
-  >
-    <List size={20} />
-  </button>
-</div>
-</div>
-
-      <hr className="border-gray-200" />
-
-      <div
-  className={
-    listView
-      ? "flex flex-col gap-5"
-      : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-  }
->
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-lg ${
-  listView
-    ? "flex flex-row items-stretch"
-    : "flex flex-col justify-between"
-}`}
+        {/* VIEW SWITCH */}
+        <div className="flex overflow-hidden rounded-lg border bg-white shadow-sm">
+          <button
+            onClick={() => setListView(false)}
+            className={`p-2 ${
+              !listView
+                ? "bg-[#EA0029] text-white"
+                : "text-gray-500 hover:bg-gray-100"
+            }`}
           >
-            <div className={listView ? "flex flex-1" : ""}>
-<img
-  src={product.image}
-  alt={product.name}
-  className={
-    listView
-      ? "w-72 h-auto object-cover"
-      : "h-52 w-full object-cover bg-gray-50"
-  }
-/>
+            <LayoutGrid size={20} />
+          </button>
 
-              <div className="p-4 flex-1 space-y-2">
-                <h2 className="text-xl font-bold text-gray-900">{product.name}</h2>
-                <p className="text-sm text-[#53575A] leading-relaxed line-clamp-4">
-                  {product.description}
-                </p>
-              </div>
+          <button
+            onClick={() => setListView(true)}
+            className={`p-2 ${
+              listView
+                ? "bg-[#EA0029] text-white"
+                : "text-gray-500 hover:bg-gray-100"
+            }`}
+          >
+            <List size={20} />
+          </button>
+        </div>
+      </div>
+
+      <hr />
+
+      {/* CATEGORIES */}
+
+      {categories.map((category) => {
+        const filteredProducts = products.filter(
+          (item) => item.category === category,
+        );
+
+        return (
+          <section key={category} className="space-y-5">
+            <div className="flex items-center gap-3">
+              <h2 className="text-2xl font-bold text-[#53575A]">{category}</h2>
+
+              <div className="h-px flex-1 bg-gray-200" />
             </div>
 
-<div
-  className={
-    listView
-      ? "w-56 border-l border-gray-200 p-6 flex flex-col items-center justify-center gap-5"
-      : "p-4 pt-0 mt-auto"
-  }
->
-  {listView ? (
-    <>
-<span className="text-xl font-semibold text-[#EA0029]">
-  {product.price.toLocaleString("tr-TR")} ₺
-</span>
+            <div
+              className={
+                listView
+                  ? "flex flex-col gap-5"
+                  : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              }
+            >
+              {filteredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className={`
+overflow-hidden
+rounded-xl
+border
+bg-white
+shadow-sm
+transition
+hover:shadow-lg
+${listView ? "flex" : "flex h-full flex-col"}
+`}
+                >
+                  <div className={listView ? "flex flex-1" : ""}>
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={500}
+                      height={350}
+                      className={
+                        listView
+                          ? "h-56 w-72 object-cover"
+                          : "h-52 w-full object-cover"
+                      }
+                    />
 
-      <a
-        href={product.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-full rounded-lg bg-[#EA0029] py-3 text-center text-sm font-semibold text-white transition hover:bg-[#c40022]"
-      >
-        Ürün Detay
-      </a>
-    </>
-  ) : (
-<div className="w-56 border-l border-gray-200 p-6 flex flex-col items-center justify-center gap-4">
-  <span className="text-2xl font-bold text-[#EA0029]">
-    {product.price.toLocaleString("tr-TR")} ₺
-  </span>
+                    <div className="p-5">
+                      <h3 className="text-xl font-bold text-gray-900">
+                        {product.name}
+                      </h3>
 
-  <a
-    href={product.url}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="w-full rounded-lg bg-[#EA0029] py-2.5 text-center text-sm font-medium text-white transition hover:bg-[#c40022]"
-  >
-    Ürün Detay
-  </a>
-</div>
-  )}
-</div>
-          </div>
-        ))}
-      </div>
+                      <p className="mt-2 text-sm text-[#53575A] line-clamp-4">
+                        {product.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div
+                    className={
+                      listView
+                        ? "flex w-56 shrink-0 flex-col items-center justify-center gap-5 border-l p-5"
+                        : "mt-auto flex flex-col gap-4 p-5"
+                    }
+                  >
+                    <span className="text-xl font-bold text-[#EA0029]">
+                      {product.price.toLocaleString("tr-TR")} ₺
+                    </span>
+
+                    <div className="flex w-full gap-2">
+                      <a
+                        href={product.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+      flex-1
+      flex
+      h-11
+      items-center
+      justify-center
+      rounded-lg
+      bg-[#EA0029]
+      text-sm
+      font-semibold
+      text-white
+      transition
+      hover:bg-[#c40022]
+    "
+                      >
+                        Ürün Detay
+                      </a>
+
+                      {product.document && (
+                        <a
+                          href={product.document}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="
+        flex-1
+        flex
+        h-11
+        items-center
+        justify-center
+        rounded-lg
+        border
+        border-[#EA0029]
+        text-sm
+        font-semibold
+        text-[#EA0029]
+        transition
+        hover:bg-[#EA0029]
+        hover:text-white
+      "
+                        >
+                          Dokümanlar
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </main>
   );
 }

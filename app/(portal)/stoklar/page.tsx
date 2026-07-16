@@ -52,7 +52,71 @@ export default function InventoryPage() {
   const [scannerOpen, setScannerOpen] = useState(false);
   const [scannedCode, setScannedCode] = useState("");
 
+  const [maxDailyUsage, setMaxDailyUsage] = useState(0);
+  const [avgDailyUsage, setAvgDailyUsage] = useState(0);
+  const [maxLeadTime, setMaxLeadTime] = useState(0);
+  const [avgLeadTime, setAvgLeadTime] = useState(0);
+
+  const [stocks, setStocks] = useState(dummyStocks);
+  const [selectedStockId, setSelectedStockId] = useState(stocks[0]?.id ?? "");
+
+  const selectedStock = stocks.find((item) => item.id === selectedStockId);
+  const safetyStock = maxDailyUsage * maxLeadTime - avgDailyUsage * avgLeadTime;
+
+  const recommendedMinStock = Math.max(selectedStock?.minQty ?? 0, safetyStock);
+
+  const stockStatus =
+    safetyStock > (selectedStock?.minQty ?? 0)
+      ? "increase"
+      : safetyStock < (selectedStock?.minQty ?? 0)
+        ? "decrease"
+        : "ok";
+
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  const [newStock, setNewStock] = useState({
+    id: "",
+    name: "",
+    category: "",
+    sku: "",
+    qty: 0,
+    minQty: 0,
+    unit: "Adet",
+  });
+
+  const handleAddStock = () => {
+    if (!newStock.id || !newStock.name || !newStock.category || !newStock.sku) {
+      alert("Lütfen tüm alanları doldurun.");
+      return;
+    }
+
+    setStocks((prev) => [
+      ...prev,
+      {
+        ...newStock,
+        status:
+          newStock.qty === 0
+            ? "OutOfStock"
+            : newStock.qty <= newStock.minQty
+              ? "LowStock"
+              : "InStock",
+      },
+    ]);
+
+    setNewStock({
+      id: "",
+      name: "",
+      category: "",
+      sku: "",
+      qty: 0,
+      minQty: 0,
+      unit: "Adet",
+    });
+
+    setIsAddModalOpen(false);
+  };
 
   useEffect(() => {
     if (scannerOpen) {
@@ -69,7 +133,7 @@ export default function InventoryPage() {
         (decodedText) => {
           setScannedCode(decodedText);
 
-          const product = dummyStocks.find(
+          const product = stocks.find(
             (item) => item.sku === decodedText || item.id === decodedText,
           );
 
@@ -106,7 +170,10 @@ export default function InventoryPage() {
             takip edin.
           </p>
         </div>
-        <button className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#EA0029] hover:bg-[#c40022] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-[#EA0029] hover:bg-[#c40022] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+        >
           {/* Artı İkonu */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -154,9 +221,7 @@ export default function InventoryPage() {
             <p className="text-sm text-[#53575A] font-medium">
               Toplam Benzersiz Ürün
             </p>
-            <p className="text-2xl font-bold text-gray-900">
-              {dummyStocks.length}
-            </p>
+            <p className="text-2xl font-bold text-gray-900">{stocks.length}</p>
           </div>
         </div>
 
@@ -185,7 +250,7 @@ export default function InventoryPage() {
               Kritik Stok Seviyesi
             </p>
             <p className="text-2xl font-bold text-amber-600">
-              {dummyStocks.filter((s) => s.status === "LowStock").length}
+              {stocks.filter((s) => s.status === "LowStock").length}
             </p>
           </div>
         </div>
@@ -215,13 +280,192 @@ export default function InventoryPage() {
               Tükenen Ürünler
             </p>
             <p className="text-2xl font-bold text-red-600">
-              {dummyStocks.filter((s) => s.status === "OutOfStock").length}
+              {stocks.filter((s) => s.status === "OutOfStock").length}
             </p>
           </div>
         </div>
       </div>
 
       <hr className="border-gray-200" />
+
+      <div className="mb-5">
+        <label className="text-sm font-medium text-gray-600">
+          Tedarik Edilen Ürün
+        </label>
+
+        <select
+          value={selectedStockId}
+          onChange={(e) => setSelectedStockId(e.target.value)}
+          className="mt-1 w-full border rounded-lg p-2"
+        >
+          {stocks.map((stock) => (
+            <option key={stock.id} value={stock.id}>
+              {stock.name} ({stock.id})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="bg-white border rounded-xl shadow-sm p-5">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Emniyet Stoğu Hesaplama
+            </h2>
+
+            <p className="text-sm text-gray-500 mt-1">
+              Emniyet Stoğu = (Maksimum Günlük Tüketim × Maksimum Teslim Süresi)
+              − (Ortalama Günlük Tüketim × Ortalama Teslim Süresi) <br />
+              <span className="text-xs text-red-600">
+                (Lütfen birimlerin aynı olduğundan emin olun, örn: Adet/Gün)
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              Maksimum Günlük Tüketim
+            </label>
+
+            <input
+              type="number"
+              value={maxDailyUsage}
+              onChange={(e) => setMaxDailyUsage(Number(e.target.value))}
+              className="mt-1 w-full border rounded-lg p-2"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              Ortalama Günlük Tüketim
+            </label>
+
+            <input
+              type="number"
+              value={avgDailyUsage}
+              onChange={(e) => setAvgDailyUsage(Number(e.target.value))}
+              className="mt-1 w-full border rounded-lg p-2"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              Maksimum Teslim Süresi (Gün)
+            </label>
+
+            <input
+              type="number"
+              value={maxLeadTime}
+              onChange={(e) => setMaxLeadTime(Number(e.target.value))}
+              className="mt-1 w-full border rounded-lg p-2"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              Ortalama Teslim Süresi (Gün)
+            </label>
+
+            <input
+              type="number"
+              value={avgLeadTime}
+              onChange={(e) => setAvgLeadTime(Number(e.target.value))}
+              className="mt-1 w-full border rounded-lg p-2"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-xl bg-[#EA0029]/5 border border-[#EA0029]/20 p-5">
+          <div className="text-sm text-gray-600">Hesaplanan Emniyet Stoğu</div>
+
+          <div className="text-4xl font-bold text-[#EA0029] mt-2">
+            {safetyStock}
+          </div>
+
+          <div className="text-sm text-gray-500 mt-1">Adet</div>
+        </div>
+      </div>
+
+      <div className="mt-5 border-t pt-4 text-sm text-gray-600 space-y-2">
+        <div className="flex justify-between">
+          <span>Maksimum Talep</span>
+          <span>{maxDailyUsage * maxLeadTime}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span>Beklenen Talep</span>
+          <span>{avgDailyUsage * avgLeadTime}</span>
+        </div>
+
+        <div className="flex justify-between font-semibold text-[#EA0029]">
+          <span>Emniyet Stoğu</span>
+          <span>{safetyStock} Adet</span>
+        </div>
+      </div>
+
+      <div className="mt-6 grid md:grid-cols-3 gap-4">
+        <div className="rounded-lg border p-4">
+          <div className="text-sm text-gray-500">Mevcut Minimum Stok</div>
+
+          <div className="text-2xl font-bold">{selectedStock?.minQty ?? 0}</div>
+        </div>
+
+        <div className="rounded-lg border p-4">
+          <div className="text-sm text-gray-500">Hesaplanan Emniyet Stoğu</div>
+
+          <div className="text-2xl font-bold text-[#EA0029]">{safetyStock}</div>
+        </div>
+
+        <div className="rounded-lg border p-4 bg-[#EA0029]/5 border-[#EA0029]/20">
+          <div className="text-sm text-gray-500">Önerilen Minimum Stok</div>
+
+          <div className="text-2xl font-bold text-[#EA0029]">
+            {recommendedMinStock}
+          </div>
+        </div>
+      </div>
+
+      {stockStatus === "increase" && (
+        <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <h4 className="font-semibold text-amber-700">
+            ⚠ Minimum stok artırılmalı
+          </h4>
+
+          <p className="text-sm text-amber-700 mt-1">
+            Hesaplanan emniyet stoğu <b>{safetyStock} adet</b> iken mevcut
+            minimum stok <b>{selectedStock?.minQty}</b> adettir. Bu ürün için
+            minimum stok seviyesinin en az
+            <b> {recommendedMinStock} adet</b> olarak güncellenmesi önerilir.
+          </p>
+        </div>
+      )}
+
+      {stockStatus === "ok" && (
+        <div className="mt-5 rounded-lg border border-green-200 bg-green-50 p-4">
+          <h4 className="font-semibold text-green-700">
+            ✓ Minimum stok yeterli
+          </h4>
+
+          <p className="text-sm text-green-700 mt-1">
+            Mevcut minimum stok seviyesi emniyet stoğunu karşılamaktadır.
+          </p>
+        </div>
+      )}
+
+      {stockStatus === "decrease" && (
+        <div className="mt-5 rounded-lg border border-blue-200 bg-blue-50 p-4">
+          <h4 className="font-semibold text-blue-700">
+            ℹ Minimum stok gözden geçirilebilir
+          </h4>
+
+          <p className="text-sm text-blue-700 mt-1">
+            Hesaplanan emniyet stoğu mevcut minimum stok seviyesinden düşüktür.
+            Mevcut değer güvenli tarafta kalmaktadır.
+          </p>
+        </div>
+      )}
 
       {/* FİLTRELEME VE ARAMA BARBARI */}
       <div className="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between bg-white p-3 sm:p-4 border rounded-xl shadow-sm">
@@ -341,7 +585,7 @@ export default function InventoryPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-              {dummyStocks
+              {stocks
                 .filter(
                   (stock) =>
                     stock.name
@@ -444,9 +688,7 @@ export default function InventoryPage() {
 
         {/* TABLO ALTI SAYFALAMA */}
         <div className="p-3 sm:p-4 border-t bg-gray-50/50 flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center text-xs text-[#53575A]">
-          <span>
-            Toplam {dummyStocks.length} kayıttan 1-4 arası gösteriliyor
-          </span>
+          <span>Toplam {stocks.length} kayıttan 1-4 arası gösteriliyor</span>
           <div className="flex gap-2 w-full sm:w-auto">
             <button
               className="px-3 py-1 border rounded bg-white text-[#53575A] hover:bg-gray-50 disabled:opacity-50 transition-colors"
@@ -478,8 +720,8 @@ p-4
         >
           <div
             className="
-bg-white
-rounded-xl
+  bg-white
+  rounded-xl
 p-4
 w-full
 max-w-md
@@ -501,6 +743,93 @@ rounded-lg
             >
               Kapat
             </button>
+          </div>
+        </div>
+      )}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 w-full max-w-lg">
+            <h2 className="text-xl font-semibold mb-5">Yeni Stok Ekle</h2>
+
+            <div className="space-y-3">
+              <input
+                className="w-full border rounded-lg p-2"
+                placeholder="Stok Kodu"
+                value={newStock.id}
+                onChange={(e) =>
+                  setNewStock({ ...newStock, id: e.target.value })
+                }
+              />
+
+              <input
+                className="w-full border rounded-lg p-2"
+                placeholder="Ürün Adı"
+                value={newStock.name}
+                onChange={(e) =>
+                  setNewStock({ ...newStock, name: e.target.value })
+                }
+              />
+
+              <input
+                className="w-full border rounded-lg p-2"
+                placeholder="Kategori"
+                value={newStock.category}
+                onChange={(e) =>
+                  setNewStock({ ...newStock, category: e.target.value })
+                }
+              />
+
+              <input
+                className="w-full border rounded-lg p-2"
+                placeholder="SKU"
+                value={newStock.sku}
+                onChange={(e) =>
+                  setNewStock({ ...newStock, sku: e.target.value })
+                }
+              />
+
+              <input
+                type="number"
+                className="w-full border rounded-lg p-2"
+                placeholder="Miktar"
+                value={newStock.qty}
+                onChange={(e) =>
+                  setNewStock({
+                    ...newStock,
+                    qty: Number(e.target.value),
+                  })
+                }
+              />
+
+              <input
+                type="number"
+                className="w-full border rounded-lg p-2"
+                placeholder="Minimum Stok"
+                value={newStock.minQty}
+                onChange={(e) =>
+                  setNewStock({
+                    ...newStock,
+                    minQty: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 mt-6">
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-4 py-2 rounded-lg bg-gray-200"
+              >
+                İptal
+              </button>
+
+              <button
+                onClick={handleAddStock}
+                className="px-4 py-2 rounded-lg bg-[#EA0029] text-white"
+              >
+                Kaydet
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -95,7 +95,7 @@ export default function KullaniciListesiIcerik({
         </div>
         <div className="p-4 bg-gray-50 border rounded-xl shadow-sm flex flex-col">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#53575A]">
-            Aktif Departman
+            Departman Sayısı
           </span>
           <strong className="text-3xl font-bold text-gray-900 mt-1">
             {

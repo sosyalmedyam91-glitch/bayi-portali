@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { signIn } from "next-auth/react"
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import {
   FaFacebook,
   FaInstagram,
@@ -11,69 +11,86 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 import styles from "./page.module.css";
+import Image from "next/image";
 
 export default function Home() {
-  const [loading, setLoading] = useState(false)
-  const [showWarning, setShowWarning] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   const showForgotPasswordWarning = () => {
-    setShowWarning(true)
+    setShowWarning(true);
 
     setTimeout(() => {
-      setShowWarning(false)
-    }, 3000)
-  }
+      setShowWarning(false);
+    }, 3000);
+  };
 
   return (
     <main className="login-page">
-
-      <section className="login-card">
-<div className="login-brand">
-  <img src="/eys-logo.png" alt="EYS Logo" className="login-logo" />
-  <p style={{ textAlign: "center", marginTop: "25px", marginBottom: "25px", fontSize: "18px", fontWeight: "bold" }}>
-    İç ve Dış Portal
-  </p>
-</div>
-
-        <form className="login-form" onSubmit={(e) => e.preventDefault()}>
-
-          <button
-            type="button"
-            onClick={() => {
-              setLoading(true)
-
-              signIn("microsoft-entra-id", {
-                callbackUrl: "/dashboard",
-              })
-            }}
-            disabled={loading}
-          >
-            {loading
-              ? "Yönlendiriliyor..."
-              : "EYS hesabınız ile giriş yapınız"}
-          </button>
-
-          <a style={{ marginTop: "5px", marginBottom: "5px"}} href="/kayit-ol" className="login-guest">
-            Bayi kaydı oluşturmak için tıklayın
-          </a>
-
-          <div className="login-footer">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault()
-                showForgotPasswordWarning()
+      <div className="login-wrapper">
+        <section className="login-card">
+          <div className="login-brand">
+            <Image
+              src="/eys-logo.png"
+              alt="EYS Logo"
+              width={400}
+              height={160}
+              className="login-logo"
+              priority
+            />
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "25px",
+                marginBottom: "25px",
+                fontSize: "18px",
+                fontWeight: "bold",
               }}
-              className="cursor-pointer"
             >
-              Şifremi unuttum
-            </a>
+              İç ve Dış Portal
+            </p>
           </div>
 
-        </form>
-      </section>
+          <form className="login-form" onSubmit={(e) => e.preventDefault()}>
+            <button
+              type="button"
+              onClick={() => {
+                setLoading(true);
 
+                signIn("microsoft-entra-id", {
+                  callbackUrl: "/dashboard",
+                });
+              }}
+              disabled={loading}
+            >
+              {loading
+                ? "Yönlendiriliyor..."
+                : "EYS hesabınız ile giriş yapınız"}
+            </button>
 
+            <a
+              style={{ marginTop: "5px", marginBottom: "5px" }}
+              href="/kayit-ol"
+              className="login-guest"
+            >
+              Bayi kaydı oluşturmak için tıklayın
+            </a>
+
+            <div className="login-footer">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  showForgotPasswordWarning();
+                }}
+                className="cursor-pointer"
+              >
+                Şifremi unuttum
+              </a>
+            </div>
+          </form>
+        </section>
+      </div>
       {/* Tailwind Toast */}
       {showWarning && (
         <div
@@ -104,97 +121,83 @@ export default function Home() {
             />
           </svg>
 
-          <span>
-            Lütfen Bilgi İşlem ile iletişime geçin.
-          </span>
+          <span>Lütfen Bilgi İşlem ile iletişime geçin.</span>
         </div>
       )}
 
-     <footer className={styles.footer}>
+      <footer className={styles.footer}>
+        {/* Sosyal Medya - En Üst */}
+        <div className={styles.footerSocial}>
+          <a
+            href="https://www.facebook.com/eysmakina"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+          >
+            <FaFacebook />
+          </a>
 
-  {/* Sosyal Medya - En Üst */}
-  <div className={styles.footerSocial}>
-    <a
-      href="https://www.facebook.com/eysmakina"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Facebook"
-    >
-      <FaFacebook />
-    </a>
+          <a
+            href="https://www.instagram.com/eysmakina"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+          >
+            <FaInstagram />
+          </a>
 
-    <a
-      href="https://www.instagram.com/eysmakina"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Instagram"
-    >
-      <FaInstagram />
-    </a>
+          <a
+            href="https://www.youtube.com/@eysmakina"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+          >
+            <FaYoutube />
+          </a>
 
-    <a
-      href="https://www.youtube.com/@eysmakina"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="YouTube"
-    >
-      <FaYoutube />
-    </a>
+          <a
+            href="https://www.linkedin.com/company/eysmakina"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedin />
+          </a>
+        </div>
 
-    <a
-      href="https://www.linkedin.com/company/eysmakina"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="LinkedIn"
-    >
-      <FaLinkedin />
-    </a>
-  </div>
+        {/* Web Siteleri */}
+        <div className={styles.footerWebsites}>
+          <a href="https://e-y-s.com" target="_blank" rel="noopener noreferrer">
+            <FaGlobe />
+            <span>e-y-s.com</span>
+          </a>
 
+          <a
+            href="https://www.eys-gmbh.de"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaGlobe />
+            <span>eys-gmbh.de</span>
+          </a>
+        </div>
 
-  {/* Web Siteleri */}
-  <div className={styles.footerWebsites}>
-    <a
-      href="https://e-y-s.com"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <FaGlobe />
-      <span>e-y-s.com</span>
-    </a>
+        {/* Destek */}
+        <div className={styles.footerSupport}>
+          <FaEnvelope />
 
-    <a
-      href="https://www.eys-gmbh.de"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <FaGlobe />
-      <span>eys-gmbh.de</span>
-    </a>
-  </div>
+          <span>Destek talepleri için:</span>
 
+          <a href="mailto:bilgiteknolojileri@e-y-s.com">
+            bilgiteknolojileri@e-y-s.com
+          </a>
+        </div>
 
-  {/* Destek */}
-  <div className={styles.footerSupport}>
-    <FaEnvelope />
-
-    <span>
-      Destek talepleri için:
-    </span>
-
-    <a href="mailto:bilgiteknolojileri@e-y-s.com">
-      bilgiteknolojileri@e-y-s.com
-    </a>
-  </div>
-
-
-  {/* Alt Bilgi */}
-  <div className={styles.footerCopy}>
-    © {new Date().getFullYear()} EYS Makina • All Rights Reserved
-  </div>
-
-</footer>
-
+        {/* Alt Bilgi */}
+        <div className={styles.footerCopy}>
+          © {new Date().getFullYear()} EYS Makina • All Rights Reserved
+        </div>
+      </footer>
     </main>
-  )
+  );
 }

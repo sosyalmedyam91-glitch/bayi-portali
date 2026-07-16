@@ -46,6 +46,14 @@ const dummyAnnouncements = [
   },
 ];
 
+const categories = [
+  "all",
+  "İK / İzin",
+  "Eğitim / Teknoloji",
+  "Genel",
+  "Şirket İçi",
+];
+
 export default function AnnouncementsPage() {
   const [announcements, setAnnouncements] = useState(dummyAnnouncements);
   const [searchTerm, setSearchTerm] = useState("");
@@ -136,8 +144,8 @@ export default function AnnouncementsPage() {
       <hr className="border-gray-200" />
 
       {/* ARAMA VE KATEGORİ FİLTRESİ */}
-      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-white p-4 border rounded-xl shadow-sm">
-        <div className="relative w-full sm:w-72">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4 bg-white p-4 border rounded-xl shadow-sm">
+        <div className="relative w-full lg:w-72">
           <svg
             className="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
             xmlns="http://www.w3.org/2000/svg"
@@ -160,18 +168,22 @@ export default function AnnouncementsPage() {
           />
         </div>
 
-        <div className="w-full sm:w-auto">
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full sm:w-auto text-sm border rounded-lg px-3 py-2 bg-white text-[#53575A] outline-none focus:ring-2 focus:ring-[rgba(234,0,41,0.15)] focus:border-[#EA0029]"
-          >
-            <option value="all">Tüm Kategoriler</option>
-            <option value="İK / İzin">İK / İzin</option>
-            <option value="Eğitim / Teknoloji">Eğitim / Teknoloji</option>
-            <option value="Genel">Genel</option>
-            <option value="Şirket İçi">Şirket İçi</option>
-          </select>
+        <div className="flex flex-wrap items-center gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border
+          ${
+            selectedCategory === cat
+              ? "bg-[#EA0029] text-white border-[#EA0029]"
+              : "bg-white text-[#53575A] border-gray-200 hover:border-[#EA0029] hover:text-[#EA0029]"
+          }`}
+            >
+              {cat === "all" ? "Tüm Kategoriler" : cat}
+            </button>
+          ))}
         </div>
       </div>
 
